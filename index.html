@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herbstball des MCG 2025 - Powered by Metis</title>
+    <link rel="stylesheet" href="client/styles/barStyles.css">
+    <link rel="stylesheet" href="client/styles/form.css">
+    <link rel="stylesheet" href="client/styles/inputFields.css">
+    <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
+    <script type="module" src="client/scripts/main.js"></script>
+    <script type="module" src="client/scripts/finances.js"></script>
+    <script type="module" src="client/scripts/dataTicket.js" defer></script>
+    <script type="module" src="client/scripts/checks.js" defer></script>
+    <script type="module" src="client/scripts/denied.js" defer></script>
+    <script type="module" src="client/scripts/displayMessages.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+</head>
+<body>
+    <header id="header">
+        <h1 id="headliner">HERBSTBALL 2025 <span id="post-Headline">- Marie Curie meets Friedlieb Runge</span></h1>
+        <p>Tickets vorbestellen</p>
+    </header>
+    
+    <div id="sidebar">
+        <div id="sidebarElementsWrapper">
+            <!-- None Restricted Areas -->
+            <div class="sidebarTextElement selected-site-active">
+                <i class="fa-solid fa-ticket sideBarIconElement"></i>
+                <a href="#">Tickets</a>
+            </div>
+            <div class="sidebarTextElement">
+                <i class="fa-solid fa-music sideBarIconElement denied"></i>
+                <a class="denied" href="#">Musikwünsche</a>
+                <!--<a class="denied" href="client/musikwünsche.html">Musikwünsche</a>-->
+            </div>
+            
+            <!-- Seperator Line -->
+            <hr class="solid">
+
+            <!-- Restricted Areas -->
+            <div class="sidebarTextElement">
+                <i class="fa-solid fa-lock sideBarIconElement denied"></i>
+                <a class="denied" href="#">Admin-Panel</a>
+                <!--<a class="denied" href="client/admin.html">Admin-Panel</a>-->
+            </div>
+            <div class="sidebarTextElement">
+                <i class="fa-solid fa-envelope sideBarIconElement denied"></i>
+                <a class="denied" href="#">Resend Mails</a>
+                <!--<a class="denied" href="client/mails.html">Resend Mails</a>-->
+            </div>
+            <div class="sidebarTextElement">
+                <i class="fa-solid fa-door-open sideBarIconElement denied"></i>
+                <a class="denied" href="#">Einlass-Panel</a>
+                <!--<a class="denied" href="client/einlass.html">Einlass-Panel</a>-->
+            </div>
+        </div>
+    </div>
+
+    <div id="logo">
+        <img src="client/images/Metis.svg" alt="Metis-Ticketsystem Logo" srcset="">
+    </div>
+
+    <div id="mainContainer">
+        <form action="" method="post">
+
+            <!-- HEADER TICKETS: AUSWAHL EINER ANZAHL DER TICKETS-->
+            <div id="headerTickets">
+                <label for="cntTickets">Anzahl an Tickets:</label>
+                <div id="cntTickets-optionGroup">
+                    <button type="button" class="ticketCountOption selectiveButton" data-value="1">1</button>
+                    <button type="button" class="ticketCountOption selectiveButton active" data-value="2">2</button>
+                    <button type="button" class="ticketCountOption selectiveButton" data-value="3">3</button>
+                    <button type="button" class="ticketCountOption selectiveButton" data-value="4">4</button>
+                    <button type="button" class="ticketCountOption selectiveButton" data-value="5">5</button>
+                </div>
+
+                <input type="hidden" name="cntTickets" id="ticketCountInput" required>
+
+                <!--<button type="button" id="subtractTicketButton" class="button selectiveButton">
+                    <i class="fa-solid fa-minus"></i>
+                </button>-->
+            </div>
+
+            <!-- SAMPLE TICKET: DISPLAYING OF THE TICKETS-->
+            <div id="ticketsContainer">
+               <!-- 
+                <div id="ticket-01" class="ticket">
+                    <div class="input-field name">
+                        <input type="text" id="name-01" name="nachname-01" required="">
+                        <label for="name-01">Nachname:<sup>*</sup></label>
+                    </div>
+                    <div class="input-field vorname">
+                        <input type="text" id="vorname-01" name="vorname-01" required="">
+                        <label for="vorname-01">Vorname:<sup>*</sup></label>
+                    </div>
+                    <div class="input-field email">
+                        <input type="email" id="email-01" name="email-01" required="">
+                        <label for="email-01">Email-Adresse:<sup>*</sup></label>
+                    </div>
+                    <div class="age">
+                        <label id="ageLabel-01" class="ageLabel" for="ageInput-01">Alter:<sup>*</sup></label>
+                        <div id="age-optionGroup-01" class="age-optionGroup">
+                            <button type="button" class="ageOption selectiveButton buttonNeedsBorder active" data-age="16">16</button>
+                            <button type="button" class="ageOption selectiveButton buttonNeedsBorder" data-age="17">17</button>
+                            <button type="button" class="ageOption selectiveButton buttonNeedsBorder" data-age="18+">18+</button>
+                        </div>
+                        <input type="hidden" name="age-01" id="ageInput-01" required="" value="16">
+                    </div>
+                    <div class="school">
+                        <label id="schoolLabel-01" class="schoolLabel" for="schoolInput-01">Schule:<sup>*</sup></label>
+                        <div id="school-optionGroup-01" class="school-optionGroup">
+                            <button type="button" class="schoolOption selectiveButton buttonNeedsBorder active" data-school="MCG">MCG</button>
+                            <button type="button" class="schoolOption selectiveButton buttonNeedsBorder" data-school="FFR">FFR</button>
+                            <button type="button" class="schoolOption selectiveButton buttonNeedsBorder" data-school="andere">andere</button>
+                        </div>
+                        <input type="hidden" name="school-01" id="schoolInput-01" required="" value="MCG">
+                    </div>
+                </div>
+            -->
+            </div>
+
+            <!-- END OF TICKET-SECTION: BUYING AND SUBMITTING OF THE TICKETS! -->
+            <div id="downerTickets">
+                <button type="button" id="takeReservationButton">Tickets vorbestellen</button>
+                <button type="button" id="addTicketButton" class="button selectiveButton">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <div id="shoppingCart" class="button">
+                    <p id="">Gesamt: <span id="shoppingCartIndex"></span>€</p>
+                </div>
+            </div>
+        </form>
+
+        <!-- div für das Displayen der Nachrichten aus js -->
+        <div id="display">
+            <div id="display_icon">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <div id="display_textContainer">
+                <p id="display_textNode">Hier steht eine Nachricht!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

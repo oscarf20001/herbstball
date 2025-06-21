@@ -41,6 +41,15 @@ export function displayMessage(msg){
             },5000);
             break;
 
+        case 'success':
+            displayElementText.textContent = 'Reservierung erfolgreich: Gordon hat deine Bestellung bearbeitet!';
+            displayContainer.style.backgroundColor = 'var(--successGreen)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
         default:
             break;
     }

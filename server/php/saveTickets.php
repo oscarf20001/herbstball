@@ -181,10 +181,26 @@ $alreadyOwnerStmt = $conn->prepare("SELECT 1 FROM ticket_besitzer WHERE kaeufer_
 $alreadyOwnerStmt->bind_param("ii", $kaeufer->id, $kaeuferPerson->id);
 $alreadyOwnerStmt->execute();
 $alreadyOwnerStmt->store_result();
-if ($alreadyOwnerStmt->num_rows === 0) {
-    insertTicketBesitzer($conn, new TicketBesitzer($kaeufer->id, $kaeuferPerson->id));
-}
+
+$alreadyTicketOwner = $alreadyOwnerStmt->num_rows > 0;
 $alreadyOwnerStmt->close();
+
+if (!$alreadyTicketOwner) {
+    insertTicketBesitzer($conn, new TicketBesitzer($kaeufer->id, $kaeuferPerson->id));
+} elseif (count($data) === 1) {
+    // Nur der Käufer wurde eingetragen, und er ist schon Ticketbesitzer
+    echo json_encode([
+        'status' => 'already-exists',
+        'message' => 'Du hast dich bereits für ein Ticket registriert.',
+        'results' => [[
+            'status' => 'fail',
+            'message' => "{$kaeuferPerson->vorname} {$kaeuferPerson->nachname} hat bereits ein Ticket und hat sonst keine weiteren Tickets gebucht!",
+            'vorname' => $kaeuferPerson->vorname,
+            'nachname' => $kaeuferPerson->nachname
+        ]]
+    ]);
+    exit;
+}
 
 // Neue Tickets zählen
 $newTickets = 0;
@@ -236,6 +252,5 @@ if ($newTickets > 0) {
 
 echo json_encode([
     'status' => 'finished',
-    'kaeufer_id' => $kaeufer->id,
     'results' => $results
 ]);

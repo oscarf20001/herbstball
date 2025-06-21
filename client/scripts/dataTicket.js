@@ -1,5 +1,6 @@
 import { getEachTicketprice } from './finances.js';
 import { displayMessage, makeFaltyTicketVisible } from './displayMessages.js';
+import { removeFromEnd, clearInputFields } from './ticketCount.js';
 
 class Ticket {
     constructor(vorname, nachname, email, age, school, kaeufer, kaeuferID, countAnzahlTickets, sum, charges, created) {
@@ -56,19 +57,38 @@ class Ticket {
         .then(response => response.json())
         .then(data => {
             console.log('Serverantwort:', data);
-            const hasFail = data.results.some(result => result.status === 'fail');
 
-            if (hasFail) {
-                displayMessage('duplicate');
-                for (const res of data.results) {
-                    if (res.status === "fail") {
-                        const ticketDiv = findeTicketDivMitNamen(res.vorname, res.nachname);
-                        if (ticketDiv) {
-                            makeFaltyTicketVisible(ticketDiv);
+            if (Array.isArray(data.results)) {
+                const hasFail = data.results.some(result => result.status === 'fail');
+
+                if (hasFail) {
+                    displayMessage('duplicate');
+                    for (const res of data.results) {
+                        if (res.status === "fail") {
+                            const ticketDiv = findeTicketDivMitNamen(res.vorname, res.nachname);
+                            if (ticketDiv) {
+                                makeFaltyTicketVisible(ticketDiv);
+                            }
                         }
                     }
+                } else {
+                    console.log('✅ Kein Fehler in results – success');
+                    displayMessage('success');
+                    this.sendConfirmationMail(element);
+                }
+            } else if (data.results && data.results.status === "fail") {
+                // Einzelnes Fehlerobjekt
+                console.log('❌ Einzelfehler in results');
+                displayMessage('duplicate');
+                const res = data.results;
+                const ticketDiv = findeTicketDivMitNamen(res.vorname, res.nachname);
+                if (ticketDiv) {
+                    makeFaltyTicketVisible(ticketDiv);
                 }
             } else {
+                // Kein results-Feld? Oder generischer Erfolg?
+                console.log('🎯 Fallback: success ohne results');
+                displayMessage('success');
                 this.sendConfirmationMail(element);
             }
         })
@@ -78,7 +98,22 @@ class Ticket {
     }
 
     static async sendConfirmationMail(element){
-        console.log("Hier würde jetzt nh Mail gesendet werden");
+        removeFromEnd(5);
+        clearInputFields();
+        fetch('server/php/email/sendEmail.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(element) // Array als JSON-String senden
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Serverantwort:', data);
+        })
+        .catch(error => {
+            console.error('Fehler beim Senden:', error);
+        });
     }
 }
 

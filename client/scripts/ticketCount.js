@@ -55,7 +55,32 @@ ticketCountButtons.forEach(btn => {
     });
 });
 
-function removeFromEnd(count) {
+export function clearInputFields(){
+  document.getElementById('ticket-01').style.outline = "0px solid var(--pureRed)";
+
+  let inputs = document.querySelectorAll('input[type="text"]');
+  inputs.forEach(input => {
+    input.value = '';
+    input.classList.remove('user-invalid');
+    input.classList.remove('duplicate');
+    input.classList.remove('empty');
+  });
+
+  let email = document.querySelectorAll('input[type="email"]');
+  email.forEach(input => {
+    input.value = '';
+    input.classList.remove('user-invalid');
+    input.classList.remove('duplicate');
+    input.classList.remove('empty');
+  });
+
+  let emptyClasses = document.querySelectorAll('.empty');
+  emptyClasses.forEach(input => {
+    input.classList.remove('empty');
+  });
+}
+
+export function removeFromEnd(count) {
     const container = document.getElementById("ticketsContainer");
     const children = container.querySelectorAll(".ticket");
     const total = children.length;

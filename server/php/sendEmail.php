@@ -317,14 +317,14 @@ function generateCodeFromId(EmpfaengerPerson $empfaengerPerson): string {
     $decimal = gmp_strval(gmp_init(substr($hash, 0, 15), 16), 10);
     $shortCode = substr($decimal, 0, 10);
 
-    // Optional: Debug global ausgeben (wenn du willst)
-    // global $results;
-    // $results[] = [
-    //     "ID" => $empfaengerPerson->id,
-    //     "Hash" => $hash,
-    //     "Decimal" => $decimal,
-    //     "ShortCode" => $shortCode
-    // ];
+    //Optional: Debug global ausgeben (wenn du willst)
+    global $results;
+    $results[] = [
+        "ID" => $empfaengerPerson->id,
+        "Hash" => $hash,
+        "Decimal" => $decimal,
+        "ShortCode" => $shortCode
+    ];
 
     return $shortCode;
 }

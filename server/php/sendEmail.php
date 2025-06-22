@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -269,8 +274,11 @@ try {
     log_data_mail($conn, $empfaengerPerson);
     #sendJsonResponse(['message' => 'E-Mail erfolgreich gesendet', 'sum' => number_format($sum, 2)]);
 } catch (Exception $e) {
-    #logError("PHPMailer Fehler: " . $mail->ErrorInfo);
-    #sendJsonResponse(['error' => 'E-Mail konnte nicht gesendet werden']);
+    echo json_encode([
+        'error' => 'E-Mail konnte nicht gesendet werden',
+        'info' => $mail->ErrorInfo
+    ]);
+    exit;
 }
 
 function sentCodeToKaeufer(mysqli $conn, EmpfaengerPerson $empfaengerPerson, int $code): array {
@@ -304,20 +312,21 @@ function sentCodeToKaeufer(mysqli $conn, EmpfaengerPerson $empfaengerPerson, int
     ];
 }
 
-function generateCodeFromId(EmpfaengerPerson $empfaengerPerson): int {
+function generateCodeFromId(EmpfaengerPerson $empfaengerPerson): string {
     $hash = hash('sha256', 'secret_salt' . $empfaengerPerson->id);
-    $base36 = base_convert($hash, 16, 36);
-    $shortCode = substr($base36, 0, 10);
+    $decimal = gmp_strval(gmp_init(substr($hash, 0, 15), 16), 10);
+    $shortCode = substr($decimal, 0, 10);
 
-    $ntn[] = [
-        "ID" => $empfaengerPerson->id,
-        "Hash" => $hash,
-        "Substr (15)" => $substr($hash, 0, 15),
-        "Decimal" => $decimal,
-        "shortCode" => $shortCode
-    ];
+    // Optional: Debug global ausgeben (wenn du willst)
+    // global $results;
+    // $results[] = [
+    //     "ID" => $empfaengerPerson->id,
+    //     "Hash" => $hash,
+    //     "Decimal" => $decimal,
+    //     "ShortCode" => $shortCode
+    // ];
 
-    return strtoupper($shortCode); // Optional: Alles in Großbuchstaben
+    return $shortCode;
 }
 
 function log_data_mail($conn, $empfaengerPerson){
@@ -358,5 +367,6 @@ function log_data_mail($conn, $empfaengerPerson){
 echo json_encode([
     'status' => 'finished',
     'empfaenger' => $empfaengerPerson,
-    'ntn' => $ntn
+    'ntn' => $ntn,
+    'debug' => $results
 ]);

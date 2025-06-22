@@ -305,9 +305,17 @@ function sentCodeToKaeufer(mysqli $conn, EmpfaengerPerson $empfaengerPerson, int
 }
 
 function generateCodeFromId(EmpfaengerPerson $empfaengerPerson): int {
-    $hash = hash('sha256', 'secret_salt' . $empfaengerPerson->id); // Sicheren Hash erzeugen
-    $decimal = gmp_strval(gmp_init(substr($hash, 0, 15), 16), 10); // Hex → Dezimal (nur Zahlen)
-    $shortCode = substr($decimal, 0, 10); // Auf 10 Ziffern kürzen
+    $hash = hash('sha256', 'secret_salt' . $empfaengerPerson->id);
+    $base36 = base_convert($hash, 16, 36);
+    $shortCode = substr($base36, 0, 10);
+
+    $ntn[] = [
+        "ID" => $empfaengerPerson->id,
+        "Hash" => $hash,
+        "Substr (15)" => $substr($hash, 0, 15),
+        "Decimal" => $decimal,
+        "shortCode" => $shortCode
+    ];
 
     return strtoupper($shortCode); // Optional: Alles in Großbuchstaben
 }

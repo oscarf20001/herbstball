@@ -45,7 +45,7 @@ export function displayMessage(msg){
             break;
 
         case 'success':
-            displayElementText.textContent = 'Reservierung erfolgreich: Gordon hat deine Bestellung bearbeitet!';
+            displayElementText.textContent = 'Reservierung erfolgreich: Bestätige deine Tickets per E-Mail – sonst verfallen sie nach 24h.';
             displayContainer.style.backgroundColor = 'var(--successGreen)';
             displayContainer.style.transform = 'translate(-50%, 0%)';
             setTimeout(() => {

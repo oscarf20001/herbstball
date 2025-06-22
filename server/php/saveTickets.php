@@ -88,12 +88,12 @@ function insertPerson(mysqli $conn, Person $person): ?int {
 }
 
 function insertKaeufer(mysqli $conn, Kaeufer $kaeufer): ?int {
-    $stmt = $conn->prepare("INSERT INTO kaeufer (person_id, created, submited, charges, paid_charges, tickets) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO kaeufer (person_id, created, submited, charges, paid_charges, tickets, checked) VALUES (?, ?, ?, ?, ?, ?, ?)");
     if (!$stmt) return null;
     $created = $kaeufer->created->format('Y-m-d H:i:s');
     $submited = $kaeufer->submited->format('Y-m-d H:i:s');
     $oneTicket = 1;
-    $stmt->bind_param("issddi", $kaeufer->person_id, $created, $submited, $kaeufer->summe, $kaeufer->paid_charges, $oneTicket);
+    $stmt->bind_param("issddii", $kaeufer->person_id, $created, $submited, $kaeufer->summe, $kaeufer->paid_charges, $oneTicket, $code);
     if (!$stmt->execute()) return null;
     $id = $stmt->insert_id;
     $stmt->close();

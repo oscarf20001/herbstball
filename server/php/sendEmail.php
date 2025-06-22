@@ -138,6 +138,11 @@ if (!is_array($data) || count($data) < 1) {
 $empfaengerData = $data[0];
 $empfaengerPerson = new EmpfaengerPerson($conn, $empfaengerData);
 
+$ntn = [];
+$code = generateCodeFromId($empfaengerPerson);
+$result = sentCodeToKaeufer($conn, $empfaengerPerson, $code);
+$ntn[] = $result;
+
 $iban = 'DE61 1605 0000 1102 4637 24';
 
 $mail = new PHPMailer(true);
@@ -220,7 +225,13 @@ try {
                             </tbody>
                         </table>
                         <p>
-                            <strong>Wenn du überweisen möchtest:</strong> Überweise dazu die oben genannte Summe an dieses Konto:
+                            <strong>Bestätige deine Tickets:</strong><br><br>
+                            <a href='https://curiegymnasium.de/server/mail/bestaetigen.php?id=". $empfaengerPerson->id ."&token=". $code ."'
+                            style='display: inline-block; padding: 12px 24px; font-size: 16px;
+                                    font-family: sans-serif; color: white; background-color: #7F63F4;
+                                    text-decoration: none; border-radius: 5px;'>
+                                Tickets bestätigen
+                            </a>
                         </p>
                         <p>
                             <strong>IBAN:</strong> ".$iban."<br>
@@ -262,6 +273,45 @@ try {
     #sendJsonResponse(['error' => 'E-Mail konnte nicht gesendet werden']);
 }
 
+function sentCodeToKaeufer(mysqli $conn, EmpfaengerPerson $empfaengerPerson, int $code): array {
+    $response = [];
+
+    $stmt = $conn->prepare("UPDATE kaeufer SET checked = ? WHERE id = ?");
+    if (!$stmt) {
+        return [
+            "status" => "error",
+            "message" => "Statement preparation failed",
+            "code" => $code
+        ];
+    }
+
+    $stmt->bind_param("ii", $code, $empfaengerPerson->id);
+    if (!$stmt->execute()) {
+        $stmt->close();
+        return [
+            "status" => "error",
+            "message" => "Statement execution failed",
+            "code" => $code
+        ];
+    }
+
+    $stmt->close();
+
+    return [
+        "status" => "success",
+        "message" => "Code erfolgreich gesetzt für Käufer ID {$empfaengerPerson->id}",
+        "code" => $code
+    ];
+}
+
+function generateCodeFromId(EmpfaengerPerson $empfaengerPerson): int {
+    $hash = hash('sha256', 'secret_salt' . $empfaengerPerson->id); // Sicheren Hash erzeugen
+    $decimal = gmp_strval(gmp_init(substr($hash, 0, 15), 16), 10); // Hex → Dezimal (nur Zahlen)
+    $shortCode = substr($decimal, 0, 10); // Auf 10 Ziffern kürzen
+
+    return strtoupper($shortCode); // Optional: Alles in Großbuchstaben
+}
+
 function log_data_mail($conn, $empfaengerPerson){
     #echo getcwd();
     $filename = 'fruelingsball.log';
@@ -299,5 +349,6 @@ function log_data_mail($conn, $empfaengerPerson){
 // Tickets vorbereiten
 echo json_encode([
     'status' => 'finished',
-    'empfaenger' => $empfaengerPerson
+    'empfaenger' => $empfaengerPerson,
+    'ntn' => $ntn
 ]);

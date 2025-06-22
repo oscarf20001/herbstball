@@ -1,6 +1,6 @@
 import { getEachTicketprice } from './finances.js';
 import { displayMessage, makeFaltyTicketVisible } from './displayMessages.js';
-import { removeFromEnd, clearInputFields } from './ticketCount.js';
+import { clearInputFields } from './ticketCount.js';
 
 class Ticket {
     constructor(vorname, nachname, email, age, school, kaeufer, kaeuferID, countAnzahlTickets, sum, charges, created) {
@@ -74,6 +74,8 @@ class Ticket {
                 } else {
                     console.log('✅ Kein Fehler in results – success');
                     displayMessage('success');
+                    const form = document.getElementById('form');
+                    form.reset();
                     this.sendConfirmationMail(element);
                 }
             } else if (data.results && data.results.status === "fail") {
@@ -98,9 +100,8 @@ class Ticket {
     }
 
     static async sendConfirmationMail(element){
-        removeFromEnd(5);
         clearInputFields();
-        fetch('server/php/email/sendEmail.php', {
+        fetch('server/php/sendEmail.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

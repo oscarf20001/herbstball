@@ -13,7 +13,7 @@ document.getElementById('takeReservationButton').addEventListener('click', async
         // Anzeigen eines Fensters im UI; Leere Felder
         displayMessage('empty');
     }else if(!handleLiveValidation()){
-        // Anzeigen eines Fensters im UI; Doppelte Einträge
+        // Anzeigen eines Fensters im UI; Doppelte Einträge (Front-End Duplicate)
         displayMessage('duplicate');
     }else if(checkEmailInvalid()){
         // Anzeigen eines Fensters im UI; Ungültige Email-Adresse

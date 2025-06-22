@@ -92,7 +92,8 @@ function insertKaeufer(mysqli $conn, Kaeufer $kaeufer): ?int {
     if (!$stmt) return null;
     $created = $kaeufer->created->format('Y-m-d H:i:s');
     $submited = $kaeufer->submited->format('Y-m-d H:i:s');
-    $stmt->bind_param("issddi", $kaeufer->person_id, $created, $submited, $kaeufer->charges, $kaeufer->paid_charges, $kaeufer->tickets);
+    $oneTicket = 1;
+    $stmt->bind_param("issddi", $kaeufer->person_id, $created, $submited, $kaeufer->summe, $kaeufer->paid_charges, $oneTicket);
     if (!$stmt->execute()) return null;
     $id = $stmt->insert_id;
     $stmt->close();
@@ -108,10 +109,11 @@ function insertTicketBesitzer(mysqli $conn, TicketBesitzer $tb): bool {
     return $ok;
 }
 
-function updateKaeuferTotals(mysqli $conn, int $kaeufer_id, float $charges, int $tickets): bool {
-    $stmt = $conn->prepare("UPDATE kaeufer SET charges = charges + ?, tickets = tickets + ? WHERE id = ?");
+function updateKaeuferTotals(mysqli $conn, int $kaeufer_id, float $charges, int $tickets, int $sum): bool {
+    $stmt = $conn->prepare("UPDATE kaeufer SET charges = charges + ?, tickets = (tickets + ?) - 1 WHERE id = ?");
     if (!$stmt) return false;
-    $stmt->bind_param("dii", $charges, $tickets, $kaeufer_id);
+    $totalCharges = ($charges - $sum);
+    $stmt->bind_param("dii", $totalCharges, $tickets, $kaeufer_id);
     $ok = $stmt->execute();
     $stmt->close();
     return $ok;
@@ -247,7 +249,8 @@ foreach (array_slice($data, 1) as $ticketData) {
 
 // Käuferdaten aktualisieren (nur wenn neue Tickets)
 if ($newTickets > 0) {
-    updateKaeuferTotals($conn, $kaeufer->id, $newCharges, $newTickets);
+    $sum = $person->sum;
+    updateKaeuferTotals($conn, $kaeufer->id, $kaeufer->charges, count($data), $sum);
 }
 
 echo json_encode([

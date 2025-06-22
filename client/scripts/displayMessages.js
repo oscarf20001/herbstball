@@ -20,6 +20,7 @@ export function displayMessage(msg){
         case 'duplicate':
             displayElementText.textContent = 'Registrierung fehlgeschlagen: Doppeltes Ticket erkannt';
             displayContainer.style.transform = 'translate(-50%, 0%)';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
             setTimeout(() => {
                 displayContainer.style.transform = 'translate(-50%, -200%)';
             },5000);
@@ -28,6 +29,7 @@ export function displayMessage(msg){
         case 'empty':
             displayElementText.textContent = 'Registrierung fehlgeschlagen: Leeres Feld erkannt';
             displayContainer.style.transform = 'translate(-50%, 0%)';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
             setTimeout(() => {
                 displayContainer.style.transform = 'translate(-50%, -200%)';
             },5000);
@@ -36,6 +38,7 @@ export function displayMessage(msg){
         case 'denied':
             displayElementText.textContent = 'Weiterleitung verweigert: Seite gesperrt';
             displayContainer.style.transform = 'translate(-50%, 0%)';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
             setTimeout(() => {
                 displayContainer.style.transform = 'translate(-50%, -200%)';
             },5000);

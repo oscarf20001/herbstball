@@ -313,9 +313,9 @@ function sentCodeToKaeufer(mysqli $conn, EmpfaengerPerson $empfaengerPerson, int
 }
 
 function generateCodeFromId(EmpfaengerPerson $empfaengerPerson): string {
-    $hash = hash('sha256', 'secret_salt' . $empfaengerPerson->id);
+    $hash = hash('sha256', 'secret_salt' . microtime() . random_int(0,12345678));
     $decimal = gmp_strval(gmp_init(substr($hash, 0, 15), 16), 10);
-    $shortCode = substr($decimal, 0, 10);
+    $shortCode = (int) substr($decimal, 0, 10);
 
     //Optional: Debug global ausgeben (wenn du willst)
     global $results;

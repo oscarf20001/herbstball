@@ -238,7 +238,7 @@ try {
             Ab wann, wo und wie Bar gezahlt werden kann, teilen wir euch noch rechtzeitig mit!
         </p>
         <p style='color:#c0392b;'>
-            <strong>Wichtig:</strong> Unbezahlte Tickets werden am <strong>10.10.2025 um 23:29 Uhr</strong> automatisch storniert!
+            <strong>Wichtig:</strong> Unbezahlte Tickets werden am <strong>10.10.2025 um 23:59 Uhr</strong> automatisch storniert!
         </p>
 
         <h2>🧾 Deine Reservierung:</h2>
@@ -279,7 +279,7 @@ $nachricht .= "
 
         <div class='qr-section'>
             <p><strong>Wenn du schon bezahlen möchtest:</strong><br>
-            Scanne den unteren QR-Code und überweise die oben genannte Gesamtsumme mit dem folgenden Verwendungszweck:<br><br>
+            Scanne den folgenden PayPal-QR-Code und überweise die oben genannte Gesamtsumme mit dem folgenden Verwendungszweck:<br><br>
             <strong>" . str_replace("@", "at", $empfaengerPerson->email) . " Herbstball</strong>
             </p><br>
             <img src='cid:paypal_qr' alt='QR zur Bezahlung' style='max-width: 100%; height: auto; border-radius: 6px;'>

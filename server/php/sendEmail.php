@@ -235,9 +235,7 @@ try {
             📍 Adresse: Friedrich-Wolf-Straße 31, Oranienburg
         </p>
         <p>
-            Die Tickets könnt ihr wie gewohnt phänomenal vor der Bibliothek oder per Überweisung bezahlen.<br>
-            Bezahlungen sind noch nicht möglich (aber deine Reservierung wurde vermerkt!).<br>
-            Wir geben euch rechtzeitig Bescheid, ab wann gezahlt werden kann.
+            Ab wann, wo und wie Bar gezahlt werden kann, teilen wir euch noch rechtzeitig mit!
         </p>
         <p style='color:#c0392b;'>
             <strong>Wichtig:</strong> Unbezahlte Tickets werden am <strong>10.10.2025 um 23:29 Uhr</strong> automatisch storniert!

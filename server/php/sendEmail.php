@@ -148,106 +148,158 @@ $code = generateCodeFromId($empfaengerPerson);
 $result = sentCodeToKaeufer($conn, $empfaengerPerson, $code);
 $ntn[] = $result;
 
+$imgPath = '../mail/images/paypal.jpeg';
+$imgData = base64_encode(file_get_contents($imgPath));
+$src = 'data:image/jpeg;base64,' . $imgData;
+
 $iban = 'DE61 1605 0000 1102 4637 24';
 
 $mail = new PHPMailer(true);
 
 try {
     $nachricht = "
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset='UTF-8'>
-                    <title>Ticketreservierung Frühlingsball 2025 MCG</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                        }
-                        th, td {
-                            padding: 8px;
-                            text-align: left;
-                            border: 1px solid #ddd;
-                        }
-                        th {
-                            background-color: #f2f2f2;
-                        }
-                        p {
-                            margin: 16px 0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <p>Hey " . $empfaengerPerson->vorname . ",</p>
-                        <p>
-                            Du hast es geschafft und dir deine grandiosen Tickets für den Herbstball 2025 gesichert – vielen Dank dafür!<br><br>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>Ticketreservierung Frühlingsball 2025 MCG</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 12px 24px;
+            font-size: 16px;
+            color: white;
+            background-color: #7F63F4;
+            text-decoration: none;
+            border-radius: 5px;
+            color: #ffffff;
+        }
+        .qr-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+        .footer {
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <h1>Hey " . $empfaengerPerson->vorname . ",</h1>
+        <p>
+            Du hast es geschafft und dir deine grandiosen Tickets für den Herbstball 2025 gesichert – vielen Dank dafür! 🎉
+        </p>
+        <p>
+            <strong>Hier sind alle wichtigen Infos:</strong><br><br>
+            📅 Datum: 17.10.2025<br>
+            🕓 Uhrzeit: Einlass ab 18:45 Uhr, Beginn um 20:00 Uhr, Ende: 01:00 Uhr<br>
+            📍 Adresse: Friedrich-Wolf-Straße 31, Oranienburg
+        </p>
+        <p>
+            Die Tickets könnt ihr wie gewohnt phänomenal vor der Bibliothek oder per Überweisung bezahlen.<br>
+            Bezahlungen sind noch nicht möglich (aber deine Reservierung wurde vermerkt!).<br>
+            Wir geben euch rechtzeitig Bescheid, ab wann gezahlt werden kann.
+        </p>
+        <p style='color:#c0392b;'>
+            <strong>Wichtig:</strong> Unbezahlte Tickets werden am <strong>10.10.2025 um 23:29 Uhr</strong> automatisch storniert!
+        </p>
 
-                            Hier sind alle wichtigen Infos:<br><br>
+        <h2>🧾 Deine Reservierung:</h2>
+        <table>
+            <tr>
+                <th>Gesamtsumme</th>
+                <td>" . $empfaengerPerson->overAllSum . "€</td>
+            </tr>
+        </table>
 
-                            Datum: 17.10.2025<br>
-                            Uhrzeit: Einlass ab 18:45 Uhr, Beginn um 20:00 Uhr, Ende: 01:00 Uhr<br>
-                            Adresse: Friedrich-Wolf-Straße 31, Oranienburg<br><br>
+        <h3>🎟️ Deine Tickets:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>Summe</th>
+                </tr>
+            </thead>
+            <tbody>";
+                foreach($empfaengerPerson->tickets as $ticket){
+                    $nachricht .= "
+                    <tr>
+                        <td>" . $ticket['vorname'] . "</td>
+                        <td>" . $ticket["nachname"] . "</td>
+                        <td>" . $ticket["sum"] . "€</td>
+                    </tr>";
+                }
+$nachricht .= "
+            </tbody>
+        </table>
 
-                            Die Tickets könnt ihr wie gewohnt phänomenal vor der Bibliothek oder per Überweisung bezahlen.<br>
-                            Bezahlungen sind noch nicht möglich (aber deine Reservierung wurde vermerkt!), und ab wann ihr die Tickets bezahlen könnt, geben wir euch noch rechtzeitig bekannt.<br><br>
-                            
-                            <strong>Wichtig:</strong> Eure Reservierungen sind dennoch nicht unbegrenzt gültig! Unbezahlte Tickets werden am 10.10.2025 um 23:29 automatisch storniert, damit andere eine fancytastische Chance auf Resttickets haben.<br>
-                        </p>
-                        <p>Hier nochmal eine kleine Übersicht deiner Reservierung:</p>
-                        <table>
-                            <thead style='border-left:2px solid black;'>
-                                <tr>
-                                    <th>Deine, noch zu begleichende, Summe:</th>
-                                    <th>" . $empfaengerPerson->overAllSum . "€</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <p>Bezüglich der Tickets:</p>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vorname</th>
-                                    <th>Nachname</th>
-                                    <th>Summe</th>
-                                </tr>
-                            </thead>
-                            <tbody>";
+        <p>
+            <a href='https://curiegymnasium.de/server/mail/bestaetigen.php?id=" . $empfaengerPerson->id . "&token=" . $code . "' class='cta-button'>
+                ✅ Tickets bestätigen
+            </a>
+        </p>
 
-                            foreach($empfaengerPerson->tickets as $ticket){
-                                $nachricht .= "
-                                <tr>
-                                    <td> " . $ticket['vorname'] . "</td>
-                                    <td>" . $ticket["nachname"] . "</td>
-                                    <td>" . $ticket["sum"] . "€</td>
-                                </tr>";
-                            }
-                    
-                            $nachricht .= "
-                            </tbody>
-                        </table>
-                        <p>
-                            <strong>Bestätige deine Tickets:</strong><br><br>
-                            <a href='https://curiegymnasium.de/server/mail/bestaetigen.php?id=". $empfaengerPerson->id ."&token=". $code ."'
-                            style='display: inline-block; padding: 12px 24px; font-size: 16px;
-                                    font-family: sans-serif; color: white; background-color: #7F63F4;
-                                    text-decoration: none; border-radius: 5px;'>
-                                Tickets bestätigen
-                            </a>
-                        </p>
-                        <p>
-                            <strong>IBAN:</strong> ".$iban."<br>
-                            <strong>Name:</strong> Raphael Stark<br>
-                            <strong>Verwendungszweck:</strong> \"". str_replace("@", "at", $empfaengerPerson->email)." Frühlingsball\"
-                        </p>
-                        <p>Wir freuen uns riesig auf einen crazytastischen Abend mit euch! 💕</p>
-                        <p>Beste Grüße,<br>Gordon</p>
-                </body>
-            </html>
-            ";
+        <div class='qr-section'>
+            <p><strong>Wenn du schon bezahlen möchtest:</strong><br>
+            Scanne den unteren QR-Code und überweise die oben genannte Gesamtsumme mit dem folgenden Verwendungszweck:<br><br>
+            <strong>" . str_replace("@", "at", $empfaengerPerson->email) . " Herbstball</strong>
+            </p><br>
+            <img src='cid:paypal_qr' alt='QR zur Bezahlung' style='max-width: 100%; height: auto; border-radius: 6px;'>
+        </div>
+
+        <p>
+            Wir freuen uns riesig auf einen crazytastischen Abend mit euch! 💕<br><br>
+            Beste Grüße,<br>
+            Gordon
+        </p>
+
+        <div class='footer'>
+            *Alle Angaben ohne Gewähr; Änderungen vorbehalten
+        </div>
+    </div>
+</body>
+</html>";
+
 
     // SMTP-Konfiguration
     $mail->isSMTP();
@@ -266,6 +318,7 @@ try {
     $mail->addAddress($empfaengerPerson->email, $fullName);
 
     // Nachricht
+    $mail->AddEmbeddedImage('../mail/images/paypal.jpeg', 'paypal_qr');
     $mail->isHTML(true);
     $mail->Subject = 'Fancytastische Buchungsbestätigung: Herbstball 2025';
     $mail->Body    = $nachricht;

@@ -2,9 +2,9 @@ import { ensureTicketCount } from './ticketCount.js';
 
 const shoppingCartIndex = document.getElementById('shoppingCartIndex');
 
-const ts_earlyBird = 1751234399; // 12€
-const ts_schonBisslTeurer = 1752443999; // 13€
-const ts_nochEtwasMehrBisslTeurer = 1754863199; // 14€
+const ts_earlyBird = 1751839199; // 12€
+const ts_schonBisslTeurer = 1753048799; // 13€
+const ts_nochEtwasMehrBisslTeurer = 1755467999; // 14€
 const ts_preLastMinute = 1759528799; // 15€
 const ts_lastMinute = 1760565599; // 17,50€
 const ts_currentTime = Date.now() / 1000;

@@ -27,8 +27,8 @@ body{
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 20vw 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 12.5vw 1fr;
+    grid-template-rows: 10vh 1fr 5vh;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     height: 100vh;

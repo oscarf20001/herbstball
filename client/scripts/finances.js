@@ -1,5 +1,3 @@
-import { ensureTicketCount } from './ticketCount.js';
-
 const shoppingCartIndex = document.getElementById('shoppingCartIndex');
 
 const ts_earlyBird = 1751839199; // 12€

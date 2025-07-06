@@ -38,6 +38,10 @@ body{
 
 #header{
     grid-area: 1 / 2 / 2 / 4;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
 }
 
 #sidebar{
@@ -192,6 +196,35 @@ header p{
 #highlight{
     color: var(--secondaryColor);
     text-decoration: underline;
+}
+
+#socialMedia{
+    margin: 0 0 0 2rem;
+    gap: 0.5rem;
+}
+
+#socialMedia i{
+    margin: 0 0.25rem 0 0;
+}
+
+#socialMedia p{
+    text-decoration: underline;
+}
+
+#socialMedia, #socialMedia a{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.fa-instagram{
+  color: transparent;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  background: -webkit-radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  background-clip: text;
+  -webkit-background-clip: text;
 }
 
 @media (max-width: 768px) {

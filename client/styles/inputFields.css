@@ -24,6 +24,10 @@
     margin: 7px 1rem 7px 0;
 }
 
+.input-field.username{
+    margin: 7px 1rem 0.75rem 0;
+}
+
 .input-field label {
     position: absolute;
     top: 50%;
@@ -75,20 +79,6 @@
     top: 10px;
     transform: translateY(-120%);
     color: var(--pureRed);
-}
-
-.input-field input:user-invalid,
-.input-field select:user-invalid{
-    color: var(--pureRed);
-}
-
-.input-field:has(input:user-invalid) {
-    border-bottom: 1px solid var(--pureRed);
-}
-
-.ticket:has(input:user-invalid), .ticket:has(input.duplicate), .ticket:has(input.empty), .ticket.duplicate{
-    outline: 2px solid var(--pureRed);
-    outline-offset: -2px;
 }
 
 input[type="submit"], input[type="button"]{

@@ -162,7 +162,7 @@ try {
 <html>
 <head>
     <meta charset='UTF-8'>
-    <title>Ticketreservierung Frühlingsball 2025 MCG</title>
+    <title>Ticketreservierung Herbstball 2025 MCG-FFR</title>
     <style>
         body {
             margin: 0;

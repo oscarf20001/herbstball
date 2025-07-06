@@ -1,5 +1,4 @@
 // displayMessages.js
-import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js";
 let displayElementText = document.getElementById('display_textNode');
 let displayContainer = document.getElementById('display');
 
@@ -46,6 +45,15 @@ export function displayMessage(msg){
 
         case 'success':
             displayElementText.textContent = 'Reservierung erfolgreich: Bestätige deine Tickets per E-Mail – sonst verfallen sie nach 24h.';
+            displayContainer.style.backgroundColor = 'var(--successGreen)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'financing_success':
+            displayElementText.textContent = 'Eintragung erfolgreich!';
             displayContainer.style.backgroundColor = 'var(--successGreen)';
             displayContainer.style.transform = 'translate(-50%, 0%)';
             setTimeout(() => {

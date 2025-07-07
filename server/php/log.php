@@ -18,7 +18,7 @@ $ip = $_SERVER['HTTP_CLIENT_IP']
     ?? $_SERVER['REMOTE_ADDR'];
 
 // Für lokalen Test ersetze hier temporär:
-$ip = "2003:e9:4f1f:8000:c523:82f5:5341:5ece";
+//$ip = "2003:e9:4f1f:8000:c523:82f5:5341:5ece";
 
 // --- Geo-API ipinfo.io aufrufen ---
 function fetchGeoDataIpInfo($ip) {

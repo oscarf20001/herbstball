@@ -2,7 +2,8 @@
 #require __DIR__ . '/vendor/autoload.php';
 use Dotenv\Dotenv;
 // Lade den Composer-Autoloader
-require '../../vendor/autoload.php';
+//require '../../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

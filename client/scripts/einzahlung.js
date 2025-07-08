@@ -176,7 +176,7 @@ function handleFinancing(personID, email) {
     const payload = {
         ID: personID,
         Methode: method,
-        Geld: money.toFixed(2)
+        Geld: subtractZeroPointNinePercent(money.toFixed(2))
     };
 
     fetch('../server/php/sendMoneyIntoDatabase.php', {
@@ -204,4 +204,8 @@ function handleFinancing(personID, email) {
 // --------------------------------------------------
 function clearForm(formElement) {
     formElement.reset();
+}
+
+function subtractZeroPointNinePercent(value) {
+  return Math.round((value - (value * 0.009) + Number.EPSILON) * 100) / 100;
 }

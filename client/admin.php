@@ -4,7 +4,13 @@ session_start();
 // Logout abfangen
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: einzahlung.php");
+    header("Location: admin.php");
+    exit;
+}
+
+// Logout abfangen
+if (isset($_GET['refresh'])) {
+    echo "Hier würden wir refreshen haha";
     exit;
 }
 
@@ -22,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,65 +37,56 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
     <link rel="stylesheet" href="styles/einzahlungen.css">
     <link rel="stylesheet" href="styles/inputFields.css">
     <link rel="stylesheet" href="styles/tables.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
     <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
-    <!--<script type="module" src="client/scripts/main.js"></script>
-    <script type="module" src="client/scripts/finances.js"></script>
-    <script type="module" src="client/scripts/dataTicket.js" defer></script>
-    <script type="module" src="client/scripts/checks.js" defer></script>
-    <script type="module" src="client/scripts/denied.js" defer></script>
-    <script type="module" src="client/scripts/displayMessages.js"></script>-->
-    <script type="module" src="scripts/searchEmails.js" defer></script>
-    <script type="module" src="scripts/einzahlung.js" defer></script>
 </head>
 <body>
     <header id="header">
         <div class="header-left">
             <h1 id="headliner">HERBSTBALL 2025 <span id="post-Headline">- Marie Curie meets Friedlieb Runge</span></h1>
-            <p>🤑🤑🤑 Einzahlungen vornehmen 🤑🤑🤑</p>
+            <p>📈📈📈 Dashboard 📈📈📈</p>
         </div>
         <div class="header-right">
             <?php if (isset($_SESSION['logged_in'])): ?>
                 <div id="logout-container">
+                    <a href="?refresh=1" id="logout-button">Akualisieren</a>
                     <a href="?logout=1" id="logout-button">Logout</a>
                 </div>
             <?php endif; ?>
         </div>
     </header>
-    
+
     <div id="sidebar">
         <div id="sidebarElementsWrapper">
             <!-- None Restricted Areas -->
-            <div class="sidebarTextElement">
+            <div class="sidebarTextElement" onclick="window.location='../index.html'">
                 <i class="fa-solid fa-ticket sideBarIconElement"></i>
                 <a href="../index.html">Tickets</a>
             </div>
-            <div class="sidebarTextElement">
-                <i class="fa-solid fa-music sideBarIconElement denied"></i>
-                <a class="denied" href="#">Musikwünsche</a>
-                <!--<a class="denied" href="client/musikwünsche.html">Musikwünsche</a>-->
+            <div class="sidebarTextElement" onclick="window.location='musikwünsche.html'">
+                <i class="fa-solid fa-music sideBarIconElement"></i>
+                <a href="musikwünsche.html">Musikwünsche</a>
             </div>
             
             <!-- Seperator Line -->
             <hr class="solid">
 
             <!-- Restricted Areas -->
-            <div class="sidebarTextElement selected-site-active">
+            <div class="sidebarTextElement">
                 <i class="fa-solid fa-euro-sign sideBarIconElement"></i>
                 <a class="" href="einzahlung.php">Einzahlung</a>
             </div>
-            <div class="sidebarTextElement">
+            <div class="sidebarTextElement selected-site-active">
                 <i class="fa-solid fa-lock sideBarIconElement"></i>
-                <a class="" href="admin.php">Admin-Panel</a>
+                <a href="#">Admin-Panel</a>
             </div>
-            <div class="sidebarTextElement">
-                <i class="fa-solid fa-envelope sideBarIconElement denied"></i>
-                <a class="denied" href="#">Resend Mails</a>
-                <!--<a class="denied" href="client/mails.html">Resend Mails</a>-->
+            <div class="sidebarTextElement" onclick="window.location='mails.html'">
+                <i class="fa-solid fa-envelope sideBarIconElement"></i>
+                <a href="mails.html">Resend Mails</a>
             </div>
-            <div class="sidebarTextElement">
-                <i class="fa-solid fa-door-open sideBarIconElement denied"></i>
-                <a class="denied" href="#">Einlass-Panel</a>
-                <!--<a class="denied" href="client/einlass.html">Einlass-Panel</a>-->
+            <div class="sidebarTextElement" onclick="window.location='einlass.html'">
+                <i class="fa-solid fa-door-open sideBarIconElement"></i>
+                <a href="einlass.html">Einlass-Panel</a>
             </div>
         </div>
     </div>
@@ -116,8 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
                 </form>
             </div>
         <?php else: ?>
-            <!-- 👉 Hier wird der normale Einzahlungsbereich geladen -->
-            <?php include 'einzahlungsFormularUndTabellen.php'; ?>
+            <?php include 'dashboard/dashboard.php'; ?>
         <?php endif; ?>
     </div>
 

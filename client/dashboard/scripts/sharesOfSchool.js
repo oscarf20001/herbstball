@@ -48,7 +48,6 @@ async function getSharesOfSchools(){
 
       const data = await response.json();
 
-      // Wenn dein PHP-Code z. B. so etwas zurückgibt: echo json_encode(['count' => $count]);
       return data;
 
   } catch (error) {

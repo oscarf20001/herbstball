@@ -98,7 +98,7 @@ input[type="submit"], input[type="button"]{
 
 .age, .school{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
 }
 
@@ -108,6 +108,7 @@ input[type="submit"], input[type="button"]{
 
 .ageLabel{
     position: relative;
+    margin: 0 3rem 0 0;
 }
 
 .ageLabel::after{

@@ -39,20 +39,23 @@ const ticketbestand = new Chart(ctx, {
 });
 
 async function getCount() {
-  try {
-    const response = await fetch('dashboard/php/getCountTilToday.php');
-    
-    if (!response.ok) {
-      throw new Error(`HTTP-Fehler: ${response.status}`);
+    // Prüft, ob der Hostname "localhost" enthält
+    const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
+
+    try {
+        const response = await fetch(basePath + '/server/php/html-structure/dashboard/php/getCountTilToday.php');
+        
+        if (!response.ok) {
+        throw new Error(`HTTP-Fehler: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Wenn dein PHP-Code z. B. so etwas zurückgibt: echo json_encode(['count' => $count]);
+        return data.count;
+
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Anzahl:', error);
+        return null;
     }
-
-    const data = await response.json();
-
-    // Wenn dein PHP-Code z. B. so etwas zurückgibt: echo json_encode(['count' => $count]);
-    return data.count;
-
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Anzahl:', error);
-    return null;
-  }
 }

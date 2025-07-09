@@ -41,8 +41,10 @@ const chartData = {
 const myChart = new Chart(ctx, config);
 
 async function howManyTicketsWeeklySold(){
+  const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
+
   try {
-      const response = await fetch('dashboard/php/weeklySoldTickets.php');
+      const response = await fetch(basePath + '/server/php/html-structure/dashboard/php/weeklySoldTickets.php');
       
       if (!response.ok) {
         throw new Error(`HTTP-Fehler: ${response.status}`);

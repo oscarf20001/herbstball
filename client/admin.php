@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require('../server/php/html-structure/extract_part-URL.php');
+
 // Logout abfangen
 if (isset($_GET['logout'])) {
     session_destroy();
@@ -39,102 +41,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
     <link rel="stylesheet" href="styles/tables.css">
     <link rel="stylesheet" href="styles/dashboard.css">
     <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
+    <script type="module" src="scripts/denied.js" defer></script>
 </head>
 <body>
+
+    <div id="display">
+        <?php
+            require('../server/php/html-structure/displayMessages.php');
+        ?>
+    </div>
+
     <header id="header">
-        <div class="header-left">
-            <h1 id="headliner">HERBSTBALL 2025 <span id="post-Headline">- Marie Curie meets Friedlieb Runge</span></h1>
-            <p>📈📈📈 Dashboard 📈📈📈</p>
-        </div>
-        <div class="header-right">
-            <?php if (isset($_SESSION['logged_in'])): ?>
-                <div id="logout-container">
-                    <a href="?refresh=1" id="logout-button">Akualisieren</a>
-                    <a href="?logout=1" id="logout-button">Logout</a>
-                </div>
-            <?php endif; ?>
-        </div>
+        <?php
+            require('../server/php/html-structure/header.php');
+        ?>
     </header>
 
     <div id="sidebar">
-        <div id="sidebarElementsWrapper">
-            <!-- None Restricted Areas -->
-            <div class="sidebarTextElement" onclick="window.location='../index.html'">
-                <i class="fa-solid fa-ticket sideBarIconElement"></i>
-                <a href="../index.html">Tickets</a>
-            </div>
-            <div class="sidebarTextElement" onclick="window.location='musikwünsche.html'">
-                <i class="fa-solid fa-music sideBarIconElement"></i>
-                <a href="musikwünsche.html">Musikwünsche</a>
-            </div>
-            
-            <!-- Seperator Line -->
-            <hr class="solid">
-
-            <!-- Restricted Areas -->
-            <div class="sidebarTextElement">
-                <i class="fa-solid fa-euro-sign sideBarIconElement"></i>
-                <a class="" href="einzahlung.php">Einzahlung</a>
-            </div>
-            <div class="sidebarTextElement selected-site-active">
-                <i class="fa-solid fa-lock sideBarIconElement"></i>
-                <a href="#">Admin-Panel</a>
-            </div>
-            <div class="sidebarTextElement" onclick="window.location='mails.html'">
-                <i class="fa-solid fa-envelope sideBarIconElement"></i>
-                <a href="mails.html">Resend Mails</a>
-            </div>
-            <div class="sidebarTextElement" onclick="window.location='einlass.html'">
-                <i class="fa-solid fa-door-open sideBarIconElement"></i>
-                <a href="einlass.html">Einlass-Panel</a>
-            </div>
-        </div>
+        <?php
+            require('../server/php/html-structure/sidebar.php');
+        ?>
     </div>
 
     <div id="logo">
-        <img src="images/Metis.svg" alt="Metis-Ticketsystem Logo" srcset="">
+        <?php
+            require('../server/php/html-structure/logo.php');
+        ?>
     </div>
 
     <div id="mainContainer">
-        <?php if (!isset($_SESSION['logged_in'])): ?>
-            <div id="login-box">
-                <h2>Login erforderlich</h2>
-                <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
-                <form method="POST">
-                    <div class="input-field username">
-                        <input type="text" name="username" id="username" required>
-                        <label for="username">Benutzername:</label>
-                    </div>
-                    <div class="input-field">
-                        <input type="password" name="password" id="password" required>
-                        <label for="password">Passwort:</label>
-                    </div>
-                    <button type="submit" id="login-btn">Einloggen</button>
-                </form>
-            </div>
-        <?php else: ?>
-            <?php include 'dashboard/dashboard.php'; ?>
-        <?php endif; ?>
+        <?php 
+            if (!isset($_SESSION['logged_in'])){
+                require('../server/php/html-structure/loginForm.php');
+            } else{
+                // -- 👉 Hier wird der normale Einzahlungsbereich geladen 
+                require('../server/php/html-structure/dashboard/dashboard.php');
+            }
+        ?>
     </div>
 
     <footer id="footer">
-        <p id="copyright">© Oscar Streich 2025</p>
-        <p id="help">concact <span id="highlight">oscar-streich@t-online.de</span> for help</p>
-
-        <div id="socialMedia">
-            <div class="oscar">
-                <a target="_blank" href="https://www.instagram.com/oscar_f20001/">
-                    <i class="fa-brands fa-instagram"></i>
-                    <p>@oscar_f20001</p>
-                </a>
-            </div>
-            <div class="rapha">
-                <a target="_blank" href="https://www.instagram.com/rap.haelo/">
-                    <i class="fa-brands fa-instagram"></i>
-                    <p>@rap.haelo</p>
-                </a>
-            </div>
-        </div>
+        <?php
+            require('../server/php/html-structure/footer.php');
+        ?>
     </footer>
 </body>
 </html>

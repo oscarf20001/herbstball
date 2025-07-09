@@ -39,19 +39,21 @@ const ticketbestand = new Chart(ctx, {
 });
 
 async function getSharesOfSchools(){
+    const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
+
     try {
-      const response = await fetch('dashboard/php/getSharesOfSchool.php');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP-Fehler: ${response.status}`);
-      }
+        const response = await fetch(basePath + '/server/php/html-structure/dashboard/php/getSharesOfSchool.php');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP-Fehler: ${response.status}`);
+        }
 
-      const data = await response.json();
+        const data = await response.json();
 
-      return data;
+        return data;
 
-  } catch (error) {
-      console.error('Fehler beim Abrufen der Wochenstatistik:', error);
-      return null;
-  }
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Wochenstatistik:', error);
+        return null;
+    }
 }

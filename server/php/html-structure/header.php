@@ -1,5 +1,14 @@
 <?php
 // Zugriff auf die globale Variable
+$basePath = $_SERVER['DOCUMENT_ROOT']; // z. B. /Users/oscarstreich/httpdocs
+
+// Nur lokal bei Entwicklung anpassen:
+if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
+    $basePath .= '/Metis/herbstball_25';
+}
+
+require_once($basePath . '/server/php/html-structure/extract_part-URL.php');
+
 $outputURLEnding = getOutputURLEnding();
 ?>
 
@@ -12,11 +21,11 @@ $outputURLEnding = getOutputURLEnding();
             <?php
         }else if($outputURLEnding == 'einzahlung'){
             ?>
-                <p>🤑🤑🤑 Einzahlungen vornehmen 🤑🤑</p>
+                <p>🤑 Geld einzahlen</p>
             <?php
         }else if($outputURLEnding == 'admin'){
             ?>
-                <p>📈📈📈 Dashboard 📈📈</p>
+                <p>📈 Dashboard</p>
             <?php
         }
     ?>

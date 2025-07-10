@@ -1,7 +1,6 @@
 <?php
-session_start();
 
-require('../server/php/html-structure/extract_part-URL.php');
+session_start();
 
 // Logout abfangen
 if (isset($_GET['logout'])) {
@@ -20,6 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
     } else {
         $error = "Falscher Benutzername oder Passwort!";
     }
+}
+
+
+$basePath = $_SERVER['DOCUMENT_ROOT']; // z.B. "/Users/oscarstreich/httpdocs"
+
+if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
+    $basePath .= '/Metis/herbstball_25';
 }
 ?>
 
@@ -45,46 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
 </head>
 <body>
 
-    <!-- div für das Displayen der Nachrichten aus js -->
-    <div id="display">
-        <?php
-            require('../server/php/html-structure/displayMessages.php');
-        ?>
-    </div>
-
-    <header id="header">
-        <?php
-            require('../server/php/html-structure/header.php');
-        ?>
-    </header>
-    
-    <div id="sidebar">
-        <?php
-            require('../server/php/html-structure/sidebar.php');
-        ?>
-    </div>
-
-    <div id="logo">
-        <?php
-            require('../server/php/html-structure/logo.php');
-        ?>
-    </div>
-
-    <div id="mainContainer">
-        <?php 
-            if (!isset($_SESSION['logged_in'])){
-                require('../server/php/html-structure/loginForm.php');
-            } else{
-                // -- 👉 Hier wird der normale Einzahlungsbereich geladen 
-                require('../server/php/html-structure/einzahlungsFormularUndTabellen.php');
-            }
-        ?>
-    </div>
-
-    <footer id="footer">
-        <?php
-            require('../server/php/html-structure/footer.php');
-        ?>
-    </footer>
+    <!-- DEFAULT TEMPLATE LADEN -->
+    <?php
+        require($basePath . '/server/php/html-structure/DEFAULT-HTML-TEMPLATE.php');
+    ?>
 </body>
 </html>

@@ -1,6 +1,13 @@
 <?php
+// Zugriff auf die globale Variable
+$basePath = $_SERVER['DOCUMENT_ROOT']; // z. B. /Users/oscarstreich/httpdocs
 
-// Speichere die Ausgabe des Scripts in einer Variablen
+// Nur lokal bei Entwicklung anpassen:
+if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
+    $basePath .= '/Metis/herbstball_25';
+}
+
+require_once($basePath . '/server/php/html-structure/extract_part-URL.php');
 $outputURLEnding = getOutputURLEnding();
 
 $basePath = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) ? '/Metis/herbstball_25' : '';
@@ -10,7 +17,7 @@ $basePath = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'loca
     <!-- None Restricted Areas -->
     <div class="sidebarTextElement selected-site-active" id="site-index">
         <i class="fa-solid fa-ticket sideBarIconElement"></i>
-        <a href="<?php echo $basePath; ?>/index.php">Einzahlung</a>
+        <a href="<?php echo $basePath; ?>/index.php">Tickets</a>
     </div>
     <div class="sidebarTextElement" id="site-music">
         <i class="fa-solid fa-music sideBarIconElement denied"></i>

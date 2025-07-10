@@ -38,8 +38,10 @@ $basePath = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'loca
         <a class="" href="<?php echo $basePath; ?>/client/admin.php">Admin-Panel</a>
     </div>
     <div class="sidebarTextElement" id="site-mails">
-        <i class="fa-solid fa-envelope sideBarIconElement denied"></i>
-        <a class="denied" href="#">Resend Mails</a>
+        <!--<i class="fa-solid fa-envelope sideBarIconElement denied"></i>
+        <a class="denied" href="<?php echo $basePath; ?>/client/mails.php">Resend Mails</a>-->
+        <i class="fa-solid fa-envelope sideBarIconElement"></i>
+        <a class="" href="<?php echo $basePath; ?>/client/mails.php">Resend Mails</a>
         <!--<a class="denied" href="client/mails.html">Resend Mails</a>-->
     </div>
     <div class="sidebarTextElement" id="site-entrance">

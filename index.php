@@ -1,4 +1,26 @@
 <?php
+
+session_start();
+
+// Logout abfangen
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: einzahlung.php");
+    exit;
+}
+
+// Login-Versuch
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
+
+    if ($user === 'admin' && $pass === 'herbstball25') {
+        $_SESSION['logged_in'] = true;
+    } else {
+        $error = "Falscher Benutzername oder Passwort!";
+    }
+}
+
 $basePath = $_SERVER['DOCUMENT_ROOT']; // z. B. /Users/oscarstreich/httpdocs
 
 // Nur lokal bei Entwicklung anpassen:

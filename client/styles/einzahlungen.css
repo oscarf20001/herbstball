@@ -226,6 +226,10 @@
     transform: translate(-50%,-50%);
 }
 
+#login-box sub{
+    margin: 0 0 2rem 0;
+}
+
 .username{
     margin: 0 0 2rem 0;
 }

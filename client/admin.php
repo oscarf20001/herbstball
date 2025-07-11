@@ -8,8 +8,6 @@ if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTT
 
 session_start();
 
-
-
 // Logout abfangen
 if (isset($_GET['logout'])) {
     session_destroy();

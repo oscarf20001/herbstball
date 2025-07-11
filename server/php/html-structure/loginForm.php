@@ -17,6 +17,8 @@ if($outputURLEnding == 'index'){
     $loginFormSubText = 'Einzahlungen';
 }else if($outputURLEnding == 'admin'){
     $loginFormSubText = 'Adminpanel';
+}else if($outputURLEnding == 'mails'){
+    $loginFormSubText = 'Mails erneut senden';
 }
 
 ?>

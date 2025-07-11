@@ -14,12 +14,12 @@ function getOutputURLEnding(){
 
     // Wenn die URL keinen Pfad nach dem Domainnamen enthält
     if (parse_url($currentUrl, PHP_URL_PATH) === '/' || parse_url($currentUrl, PHP_URL_PATH) === '') {
-        return "default";
+        return "index";
     } else {
         // Regex, um den gewünschten Teil des Strings zu extrahieren
         preg_match('#/([^/]+)\.([^/]+)$#', $currentUrl, $matches);
         // Der gewünschte Teil ist im ersten Capturing-Group (matches[1])
-        $extractedPart = $matches[1] ?? "default"; // Default-Wert, falls nichts gefunden wird
+        $extractedPart = $matches[1] ?? "index"; // Default-Wert, falls nichts gefunden wird
         return $extractedPart;
     }
 }

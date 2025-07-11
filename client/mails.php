@@ -5,7 +5,7 @@ session_start();
 // Logout abfangen
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: einzahlung.php");
+    header("Location: mails.php");
     exit;
 }
 
@@ -34,8 +34,13 @@ if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTT
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Herbstball des MCG 2025 - Powered by Metis</title>
-    <link rel="stylesheet" href="styles/BarStyles.css">
+    <link rel="stylesheet" href="styles/barStyles.css">
+    <link rel="stylesheet" href="styles/einzahlungen.css">
+    <link rel="stylesheet" href="styles/inputFields.css">
+    <link rel="stylesheet" href="styles/mails.css">
     <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
+    <script type="module" src="scripts/denied.js" defer></script>
+    <script type="module" src="scripts/resendMails.js" defer></script>
 </head>
 <body>
     <!-- DEFAULT TEMPLATE LADEN -->

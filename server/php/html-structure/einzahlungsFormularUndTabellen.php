@@ -1,25 +1,25 @@
 <form action="" method="post" id="form">
 
-            <!-- SAMPLE TICKET: DISPLAYING OF THE TICKETS-->
-            <div id="ticketsContainer"> 
-                <div id="einzahlung" class="ticket">
-                    <div class="input-field name">
-                        <input type="email" id="f-email" name="search" required>
-                        <label for="f-email">Email:</label>
-                    </div>
-                </div>
+    <!-- SAMPLE TICKET: DISPLAYING OF THE TICKETS-->
+    <div id="ticketsContainer"> 
+        <div id="einzahlung" class="ticket">
+            <div class="input-field name">
+                <input type="email" id="f-email" name="search" required>
+                <label for="f-email">Email:</label>
             </div>
+        </div>
+    </div>
 
-            <div id="suggestionContainer" class="ticket">
-                <div id="suggestions">
-                </div>
-            </div>
+    <div id="suggestionContainer" class="ticket">
+        <div id="suggestions">
+        </div>
+    </div>
 
-            <!-- END OF TICKET-SECTION: BUYING AND SUBMITTING OF THE TICKETS! -->
-            <div id="downerTickets">
-                <button type="button" id="getAllTicketsForCustomerButton" class="inactive">Käufer suchen</button>
-            </div>
-        </form>
+    <!-- END OF TICKET-SECTION: BUYING AND SUBMITTING OF THE TICKETS! -->
+    <div id="downerTickets">
+        <button type="button" id="getAllTicketsForCustomerButton" class="inactive">Käufer suchen</button>
+    </div>
+</form>
 
         <div id="displayAllTicketsContainer">
             <div class="table_component_käufer table_component" role="region" tabindex="0">

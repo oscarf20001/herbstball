@@ -69,6 +69,10 @@ if($outputURLEnding == 'index'){
     require __DIR__ . '/mainContainer/MC_einzahlung.php';
 }else if($outputURLEnding == 'admin'){
     require __DIR__ . '/mainContainer/MC_admin.php';
+}else if($outputURLEnding == 'mails'){
+    require __DIR__ . '/mainContainer/MC_mails.php';
+}else{
+    echo "Noch kein mainContainer für diese Unterseite definiert: Bitte wende dich an <code>oscar-streich@t-online.de</code>";
 }
 
 ?>

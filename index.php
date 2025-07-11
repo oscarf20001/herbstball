@@ -5,7 +5,7 @@ session_start();
 // Logout abfangen
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: einzahlung.php");
+    header("Location: index.php");
     exit;
 }
 

@@ -27,6 +27,10 @@ $outputURLEnding = getOutputURLEnding();
             ?>
                 <p>📈 Dashboard</p>
             <?php
+        }else if($outputURLEnding == 'mails'){
+            ?>
+                <p>📧 Emails erneut versenden (Für den Fall, dass jemand zu dumm war, seine Mail richtig anzugeben)</p>
+            <?php
         }
     ?>
 </div>

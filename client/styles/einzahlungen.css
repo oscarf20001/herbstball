@@ -120,7 +120,7 @@
     align-items: center;
 }
 
-#takeReservationButton, #addTicketButton, #getAllTicketsForCustomerButton, #set-money-btn, #login-btn, #logout-button{
+#takeReservationButton, #addTicketButton, #getAllTicketsForCustomerButton, #set-money-btn, #login-btn, #logout-button, #sendNewEmail-btn{
     background-color: var(--primaryColor);
     border: none;
     height: 3rem;
@@ -131,6 +131,21 @@
     cursor: pointer;
     transition: .1s ease-out;
     text-align: center;
+    font-weight: bold;
+    color: var(--blackLighter);
+}
+
+#selectNewEmailType{
+    background-color: var(--primaryColor);
+    border: none;
+    height: 3rem;
+    min-width: 4rem;
+    border-radius: 0.4rem;
+    padding: 0 1rem;
+    margin: 0 0rem 0 0;
+    cursor: pointer;
+    transition: .1s ease-out;
+    text-align: left;
     font-weight: bold;
     color: var(--blackLighter);
 }
@@ -165,12 +180,12 @@
     border: 1px solid var(--secondaryColor)
 }
 
-#takeReservationButton:hover, #addTicketButton:hover, #getAllTicketsForCustomerButton.active:hover, #set-money-btn:hover, #login-btn:hover, #logout-button:hover{
+#takeReservationButton:hover, #addTicketButton:hover, #getAllTicketsForCustomerButton.active:hover, #set-money-btn:hover, #login-btn:hover, #logout-button:hover, #sendNewEmail-btn:hover{
     background-color: var(--hover);
     color: var(--secondaryColor);
 }
 
-#getAllTicketsForCustomerButton.inactive{
+#getAllTicketsForCustomerButton.inactive, #sendNewEmail-btn.inactive{
     cursor: not-allowed;
     background-color: var(--primaryVeryDark);
 }

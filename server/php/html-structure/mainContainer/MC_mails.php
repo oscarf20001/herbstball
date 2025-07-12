@@ -36,8 +36,8 @@
                         <select name="" id="selectNewEmailType">
                             <option value="" disabled selected>Bitte auswählen</option>
                             <option value="submit_ticket">Ticketbestätigung</option>
-                            <option value="confirm_payment">Kosten bestätigen</option>
-                            <option value="ticket">Ticket senden</option>
+                            <option value="confirm_payment" disabled>Kosten bestätigen</option>
+                            <option value="ticket" disabled>Ticket senden</option>
                         </select>
                         <button type="button" id="getAllTicketsForCustomerButton" class="inactive getAllTicketsForCustomerButton"><i class="fa-solid fa-paper-plane"></i>Email senden</button>
                     </div>
@@ -52,8 +52,7 @@
         // Prüfen, ob auf ein <p> geklickt wurde
         if (event.target.tagName === "P") {
             const email = event.target.textContent;
-            document.getElementById('light-bulb-result-negative').classList.remove('active');
-            document.getElementById('light-bulb-result-positive').classList.add('active');
+            setLightBulb('positive');
         }
     });
 

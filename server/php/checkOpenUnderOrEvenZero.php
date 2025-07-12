@@ -12,8 +12,39 @@ use PHPMailer\PHPMailer\Exception;
 
 $logHandle = fopen(__DIR__ . '/kosten_beglichen.log', 'a'); // oder anderer Pfad
 
+$data = json_decode(file_get_contents('php://input'), true);
+$data['action'] = isset($data['action']) ? $data['action'] : 'null';
+
+switch ($data['action']) {
+    case 'sendConfirmationMail':
+        $shouldWeSend = checkIfOpenIsZero($conn, $data['mailerPerson']['persons'][0]['id'], $logHandle);
+        if(!$shouldWeSend){
+            writeToLog($logHandle, 'FEHLER: Anfrage für erneutes Senden der Ticketmail abgelehnt: Kosten sind nicht beglichen!');
+            $response = [
+                'error' => 'FEHLER: Anfrage für erneutes Senden der Ticketmail abgelehnt: Kosten sind nicht beglichen!'
+            ];
+            echo json_encode($response);
+            break;
+        }
+
+        $dataAsPerson = $data['mailerPerson']['persons'][0];
+        $dataAsKaeufer = $data['mailerPerson']['kaeufer'][0];
+        sendConfirmationMail($conn, $dataAsPerson['vorname'], $dataAsPerson['email'], $dataAsKaeufer['charges'], $dataAsKaeufer['paid_charges'], $dataAsKaeufer['open_charges'], $logHandle);
+
+        $response = [
+            'mgs' => 'INFO: Senden der Nachricht sollte erfolgreich durchgeführt worden sein!'
+        ];
+        echo json_encode($response);
+        break;
+
+    case 'null':
+        break;
+    
+    default:
+        break;
+}
+
 function checkIfOpenIsZero($conn, $id, $logHandle) {
-    // z. B. Update, Logik, zusätzliche Checks usw.
     $stmt = $conn->prepare("SELECT person.vorname, person.email, kaeufer.charges, kaeufer.paid_charges, kaeufer.open_charges
                             FROM kaeufer
                             JOIN person ON kaeufer.person_id = person.id
@@ -25,110 +56,113 @@ function checkIfOpenIsZero($conn, $id, $logHandle) {
     $stmt->close();
 
     if ($open <= 0) {
-        // Mail senden
+        // Mail senden: ACHTUNG: HIER ENTSTEHT EIN BUG, WENN DIE ANFRAGE AUS DEM RESEND-PORTAL KOMMT, DA DIE FUNKTION ZUM SENDEN DANN ZWEIMAL AUFGERUFEN WIRD
         sendConfirmationMail($conn, $vorname, $email, $charges, $paid, $open, $logHandle);
+        return true;
+    }else{
+        return false;
     }
 }
 
 function sendConfirmationMail($conn, $vorname, $email, $charges, $paid, $open, $logHandle){
     $nachricht = "
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='UTF-8'>
-    <title>Ticketbestätigung Herbstball 2025 MCG-FFR</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f6f6f6;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 24px;
-            border-radius: 8px;
-        }
-        h1 {
-            font-size: 24px;
-            color: #333;
-        }
-        p {
-            font-size: 16px;
-            color: #333;
-            line-height: 1.6;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .cta-button {
-            display: inline-block;
-            margin-bottom: 24px;
-            padding: 12px 24px;
-            font-size: 16px;
-            color: white;
-            background-color: #7F63F4;
-            text-decoration: none;
-            border-radius: 5px;
-            color: #ffffff;
-        }
-        .qr-section {
-            text-align: center;
-            margin: 32px 0;
-        }
-        .footer {
-            font-size: 12px;
-            color: #888;
-            text-align: center;
-            margin-top: 40px;
-        }
-    </style>
-</head>
-<body>
-    <div class='container'>
-        <h1>
-            Hey " . $vorname . ",
-        </h1>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Ticketbestätigung Herbstball 2025 MCG-FFR</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: #f6f6f6;
+                font-family: Arial, sans-serif;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                padding: 24px;
+                border-radius: 8px;
+            }
+            h1 {
+                font-size: 24px;
+                color: #333;
+            }
+            p {
+                font-size: 16px;
+                color: #333;
+                line-height: 1.6;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 16px;
+            }
+            th, td {
+                padding: 12px;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .cta-button {
+                display: inline-block;
+                margin-bottom: 24px;
+                padding: 12px 24px;
+                font-size: 16px;
+                color: white;
+                background-color: #7F63F4;
+                text-decoration: none;
+                border-radius: 5px;
+                color: #ffffff;
+            }
+            .qr-section {
+                text-align: center;
+                margin: 32px 0;
+            }
+            .footer {
+                font-size: 12px;
+                color: #888;
+                text-align: center;
+                margin-top: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h1>
+                Hey " . $vorname . ",
+            </h1>
 
-        <p>
-            Deine Kosten in Höhe von:<br><br>
-            ". $charges . "€<br><br>
-            wurden voll und ganz beglichen. Wie episch!<br>
-            Wir werden dir zu einem späteren Zeitpunkt nochmal eine Mail mit deinem finalen Ticket und wichtigen Informationen schicken.<br>
-            Wir haben Bock und freuen uns zusammen mit dir auf den 17.10.2025<br><br>
-        </p>
+            <p>
+                Deine Kosten in Höhe von:<br><br>
+                ". $charges . "€<br><br>
+                wurden voll und ganz beglichen. Wie episch!<br>
+                Wir werden dir zu einem späteren Zeitpunkt nochmal eine Mail mit deinem finalen Ticket und wichtigen Informationen schicken.<br>
+                Wir haben Bock und freuen uns zusammen mit dir auf den 17.10.2025<br><br>
+            </p>
 
-        <p>
-            Hier kannst du weitere Tickets bestellen:<br>
-            <a href='https://curiegymnasium.de/' class='cta-button'>
-                🎟️ Tickets holen
-            </a>
-            <br>
-            <br>
-            Bei Fragen oder Problemen wende dich bitte an: <code>oscar-streich@t-online.de</code>
-        </p>
+            <p>
+                Hier kannst du weitere Tickets bestellen:<br>
+                <a href='https://curiegymnasium.de/' class='cta-button'>
+                    🎟️ Tickets holen
+                </a>
+                <br>
+                <br>
+                Bei Fragen oder Problemen wende dich bitte an: <code>oscar-streich@t-online.de</code>
+            </p>
 
-        <p>
-            Mit freundlichen Grüßen,<br>Gordon!
-        </p>
+            <p>
+                Mit freundlichen Grüßen,<br>Gordon!
+            </p>
 
-        <div class='footer'>
-            *Alle Angaben ohne Gewähr; Änderungen vorbehalten
-        </div>
-        
-        ";
+            <div class='footer'>
+                *Alle Angaben ohne Gewähr; Änderungen vorbehalten
+            </div>
+            
+            ";
 
         try {
             $mail = new PHPMailer(true);

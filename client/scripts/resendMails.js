@@ -9,17 +9,17 @@ btn.addEventListener('click', () => {
     const input = document.getElementById('f-email');
 
     if (!input.value.trim()) {
-        console.error("Fetch bezüglich Käufer für neue Emails abgebrochen: Input-Feld leer");
+        console.error("Fetch bezüglich Käufer für neue Emails abgelehnt: Input-Feld leer");
         return;
     }
 
     if (btn.classList.contains('inactive')) {
-        console.error("Fetch bezüglich Käufer für neue Emails abgebrochen: Button gesperrt!");
+        console.error("Fetch bezüglich Käufer für neue Emails abgelehnt: Button gesperrt!");
         return;
     }
 
     if(selectElement.value == '' || selectElement.value === ''){
-        console.error("Fetch bezüglich Käufer für neue Emails abgebrochen: Keine Methode ausgewählt");
+        console.error("Fetch bezüglich Käufer für neue Emails abgelehnt: Keine Methode ausgewählt");
         return;
     }
 
@@ -56,8 +56,6 @@ function resendEmail(data, method){
         case 'submit_ticket':
             console.info("Submit-Mail senden");
 
-            console.log(data);
-
             fetch('../server/php/resendMail_submitTicket.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -75,9 +73,28 @@ function resendEmail(data, method){
 
         case 'confirm_payment':
             console.info("Zahlungsmail senden");
-    
+            
+            fetch('../server/php/checkOpenUnderOrEvenZero.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    mailerPerson: data,
+                    action: 'sendConfirmationMail'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Serverantwort:', data);
+            })
+            .catch(error => {
+                console.error('Fehler beim Senden:', error);
+            });
+
+            break;
+            
         default:
             console.error("Mailversand abgebrochen: Fehler bei Zuweisung der Methode");
+            alert("Dieser Mailweg ist noch nicht fertiggestellt!")
             break;
     }
 }

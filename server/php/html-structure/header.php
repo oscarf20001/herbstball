@@ -1,13 +1,9 @@
 <?php
-// Zugriff auf die globale Variable
-$basePath = $_SERVER['DOCUMENT_ROOT']; // z. B. /Users/oscarstreich/httpdocs
+// config.php einbinden (Pfad ggf. anpassen, je nachdem wo header.php liegt)
+require_once __DIR__ . '/../../../config.php';
 
-// Nur lokal bei Entwicklung anpassen:
-if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
-    $basePath .= '/Metis/herbstball_25';
-}
-
-require_once($basePath . '/server/php/html-structure/extract_part-URL.php');
+// Jetzt BASE_PATH verwenden, um die Datei einzubinden
+require_once(BASE_PATH . '/server/php/html-structure/extract_part-URL.php');
 
 $outputURLEnding = getOutputURLEnding();
 ?>
@@ -15,22 +11,14 @@ $outputURLEnding = getOutputURLEnding();
 <div class="header-left">
     <h1 id="headliner">HERBSTBALL 2025 <span id="post-Headline">- Marie Curie meets Friedlieb Runge</span></h1>
     <?php
-        if($outputURLEnding == 'index' || $outputURLEnding == ''){
-            ?>
-                <p>🎟 Tickets vorbestellen</p>
-            <?php
-        }else if($outputURLEnding == 'einzahlung'){
-            ?>
-                <p>🤑 Geld einzahlen</p>
-            <?php
-        }else if($outputURLEnding == 'admin'){
-            ?>
-                <p>📈 Dashboard</p>
-            <?php
-        }else if($outputURLEnding == 'mails'){
-            ?>
-                <p>📧 Emails erneut versenden (Für den Fall, dass jemand zu dumm war, seine Mail richtig anzugeben)</p>
-            <?php
+        if ($outputURLEnding == 'index' || $outputURLEnding == '') {
+            echo '<p>🎟 Tickets vorbestellen</p>';
+        } elseif ($outputURLEnding == 'einzahlung') {
+            echo '<p>🤑 Geld einzahlen</p>';
+        } elseif ($outputURLEnding == 'admin') {
+            echo '<p>📈 Dashboard</p>';
+        } elseif ($outputURLEnding == 'mails') {
+            echo '<p>📧 Emails erneut versenden (Für den Fall, dass jemand zu dumm war, seine Mail richtig anzugeben)</p>';
         }
     ?>
 </div>

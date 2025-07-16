@@ -32,7 +32,7 @@
                             <th>Nachname</th>
                             <th>Tickets</th>
                             <th>Zu Bezahlen</th>
-                            <th>Gezahlt</th>
+                            <th>Gezahlt<sup>exklusiv 0.9% (PayPal)</sup></th>
                             <th>Offen</th>
                         </tr>
                         <tr>

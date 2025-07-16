@@ -68,7 +68,7 @@ function renderTables(data, email) {
                         <th>Nachname</th>
                         <th>Tickets</th>
                         <th>Zu Bezahlen</th>
-                        <th>Gezahlt</th>
+                        <th>Gezahlt <sup style="font-weight: normal; color: var(--greyLighter);">exkl. 0.9% (wenn PayPal)</sup></th>
                         <th>Offen</th>
                     </tr>
                 </thead>

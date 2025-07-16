@@ -21,20 +21,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
     }
 }
 
-$basePath = $_SERVER['DOCUMENT_ROOT']; // z. B. /Users/oscarstreich/httpdocs
+// Basis-Pfad setzen
+$docRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
 
-// Nur lokal bei Entwicklung anpassen:
-if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
-    $basePath .= '/Metis/herbstball_25';
+// Prüfen, ob wir lokal sind
+$isLocalhost = strpos($_SERVER['HTTP_HOST'], 'localhost') !== false
+    || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false;
+
+// Falls lokal, Basis-Pfad anpassen, aber doppelte Verzeichnisse vermeiden
+if ($isLocalhost) {
+    // Beispiel: Wenn DOCUMENT_ROOT schon 'httpdocs' enthält, aber NICHT 'herbstball_25'
+    if (!str_ends_with($docRoot, 'herbstball_25')) {
+        $basePath = $docRoot . '/Metis/herbstball_25';
+    } else {
+        $basePath = $docRoot;  // Falls der Pfad schon korrekt ist
+    }
+} else {
+    // Auf dem Server nehme einfach DOCUMENT_ROOT als Basis
+    $basePath = $docRoot;
 }
 
-// Inkludiere das ausgelagerte Script
-require_once($basePath . '/server/php/html-structure/extract_part-URL.php');
+// Debug: Pfad anzeigen (zum Testen, später entfernen)
+// var_dump($basePath);
+// exit;
 
-// Speichere die Ausgabe des Scripts in einer Variablen
+// Pfad zur benötigten Datei
+$extractPartUrlPath = $basePath . '/server/php/html-structure/extract_part-URL.php';
+
+if (!file_exists($extractPartUrlPath)) {
+    die("Fehler: Die Datei extract_part-URL.php wurde nicht gefunden unter: $extractPartUrlPath");
+}
+
+// Datei einbinden
+require_once($extractPartUrlPath);
+
+// Funktion aufrufen
 $outputURLEnding = getOutputURLEnding();
 
-// Mach die Variable global
+// Globale Variable setzen
 $GLOBALS['outputURLEnding'] = $outputURLEnding;
 ?>
 

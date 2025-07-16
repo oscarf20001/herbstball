@@ -4,11 +4,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-$basePath = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) 
-    ? $_SERVER['DOCUMENT_ROOT'] . '/Metis/herbstball_25' 
-    : $_SERVER['DOCUMENT_ROOT']; 
-
-require $basePath . '/server/php/db_connection.php';
+require_once __DIR__ . '/../../../../../config.php'; // oder richtiger relativer Pfad
+require_once BASE_PATH . '/server/php/db_connection.php';
 
 $result = [];
 $count = 0;

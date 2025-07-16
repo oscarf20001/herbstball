@@ -42,7 +42,7 @@ async function getAccessLocations(){
   const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
 
   try {
-      const response = await fetch(basePath + '/server/php/html-structure/dashboard/php/getAccessLocationsData.php');
+      const response = await fetch('/server/php/html-structure/dashboard/php/getAccessLocationsData.php');
       
       if (!response.ok) {
         throw new Error(`HTTP-Fehler: ${response.status}`);

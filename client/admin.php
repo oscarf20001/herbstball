@@ -1,10 +1,8 @@
 <?php
-$basePath = $_SERVER['DOCUMENT_ROOT']; // z. B. /Users/oscarstreich/httpdocs
+require_once __DIR__ . '/../config.php'; // Holt BASE_PATH und BASE_URL aus config.php
+require_once BASE_PATH . '/server/php/html-structure/extract_part-URL.php';
 
-// Nur lokal bei Entwicklung anpassen:
-if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
-    $basePath .= '/Metis/herbstball_25';
-}
+$outputURLEnding = getOutputURLEnding();
 
 session_start();
 
@@ -40,19 +38,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Herbstball des MCG 2025 - Powered by Metis</title>
-    <link rel="stylesheet" href="styles/barStyles.css">
-    <link rel="stylesheet" href="styles/einzahlungen.css">
-    <link rel="stylesheet" href="styles/inputFields.css">
-    <link rel="stylesheet" href="styles/tables.css">
-    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/barstyles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/barStyles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/einzahlungen.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/inputFields.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/tables.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/dashboard.css">
     <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
-    <script type="module" src="scripts/denied.js" defer></script>
+    <script type="module" src="<?= BASE_URL ?>/client/scripts/denied.js" defer></script>
 </head>
 <body>
 
     <!-- DEFAULT TEMPLATE LADEN -->
     <?php
-        require($basePath . '/server/php/html-structure/DEFAULT-HTML-TEMPLATE.php');
+        require(BASE_PATH . '/server/php/html-structure/DEFAULT-HTML-TEMPLATE.php');
     ?>
 </body>
 </html>

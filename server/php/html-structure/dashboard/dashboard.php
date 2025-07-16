@@ -1,6 +1,6 @@
 <?php
 require '../server/php/db_connection.php';
-$basePath = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) ? '/Metis/herbstball_25' : '';
+require_once __DIR__ . '/../../../../config.php'; // Holt BASE_PATH und BASE_URL aus config.php
 ?>
 
 <div id="dashboardDisplayContainer">
@@ -166,16 +166,16 @@ $basePath = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'loca
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/animations.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/animations.js"></script>
 <script src="../node_modules/chart.js/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/ticketbestand.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/todaySold.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/weeklySold.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/webStatisticsUserDevices.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/webStatisticsAccessLocations.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/ageStructur.js"></script>
-<script type="module" src="<?php echo $basePath; ?>/server/php/html-structure/dashboard/scripts/sharesOfSchool.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/ticketbestand.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/todaySold.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/weeklySold.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/webStatisticsUserDevices.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/webStatisticsAccessLocations.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/ageStructur.js"></script>
+<script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/sharesOfSchool.js"></script>
 
 <?php
 $conn->close();

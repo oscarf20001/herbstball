@@ -39,6 +39,13 @@ function fetchAndRender(email) {
     .then(data => {
         console.log('Serverantwort:', data);
         renderTables(data, email);
+
+        // Generierung der Tickets
+        if(data.kaeufer[0].open_charges <= 0){
+            alert("Ausführung");
+            trigger_generation_tickets(data);
+        }
+
     })
     .catch(error => {
         console.error('Fehler beim Senden:', error);
@@ -138,7 +145,7 @@ function renderTables(data, email) {
                     </select>
                 </div>
                 <div id="money-form-right">
-                    <input type="button" value="Eintragen" id="set-money-btn">
+                    <input type="button" value="Eintragen und Ticket senden" id="set-money-btn">
                 </div>
             </form>
         </div>
@@ -208,4 +215,25 @@ function clearForm(formElement) {
 
 function subtractZeroPointNinePercent(value) {
   return Math.round((value - (value * 0.009) + Number.EPSILON) * 100) / 100;
+}
+
+function trigger_generation_tickets(data){
+    for (let index = 0; index < data.persons.length; index++) {
+        fetch('../server/ticket/trigger_gen.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data.persons[index])
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert("Generierung der Ticket(s) erfolgreich");
+            } else {
+                alert("Generierung der Tickets fehlgeschlagen");
+            }
+        })
+        .catch(error => {
+            console.error("Fehler bei der Ticketgenerierung:", error);
+        });
+    }
 }

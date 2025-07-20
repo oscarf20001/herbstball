@@ -1,70 +1,76 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-require 'db_connection.php';
-require __DIR__ . '/../../vendor/autoload.php'; // Autoloader einbinden
+require_once __DIR__ . '/../../server/php/db_connection.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$logHandle = fopen(__DIR__ . '/kosten_beglichen.log', 'a'); // oder anderer Pfad
+// Person-ID empfangen
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+$personId = $data['id'] ?? $_GET['id'] ?? 1;
 
-$data = json_decode(file_get_contents('php://input'), true);
-$data['action'] = isset($data['action']) ? $data['action'] : 'null';
+$email = $data['email'] ?? 'streiosc@curiegym.de';
+$vorname = $data['vorname'] ?? 'Teilnehmer';
 
-switch ($data['action']) {
-    case 'sendConfirmationMail':
-        $shouldWeSend = checkIfOpenIsZero($conn, $data['mailerPerson']['persons'][0]['id'], $logHandle);
-        if(!$shouldWeSend){
-            writeToLog($logHandle, 'FEHLER: Anfrage für erneutes Senden der Ticketmail abgelehnt: Kosten sind nicht beglichen!');
-            $response = [
-                'error' => 'FEHLER: Anfrage für erneutes Senden der Ticketmail abgelehnt: Kosten sind nicht beglichen!'
-            ];
-            echo json_encode($response);
-            break;
-        }
-
-        $dataAsPerson = $data['mailerPerson']['persons'][0];
-        $dataAsKaeufer = $data['mailerPerson']['kaeufer'][0];
-        sendConfirmationMail($conn, $dataAsPerson['id'], $dataAsPerson['vorname'], $dataAsPerson['email'], $dataAsKaeufer['charges'], $dataAsKaeufer['paid_charges'], $dataAsKaeufer['open_charges'], $logHandle);
-
-        $response = [
-            'mgs' => 'INFO: Senden der Nachricht sollte erfolgreich durchgeführt worden sein!'
-        ];
-        echo json_encode($response);
-        break;
-
-    case 'null':
-        break;
-    
-    default:
-        break;
+if (!$email) {
+    echo json_encode([
+        'status' => 'fail',
+        'message' => 'E-Mail-Adresse fehlt!'
+    ]);
+    return;
 }
 
-function checkIfOpenIsZero($conn, $id, $logHandle) {
-    $stmt = $conn->prepare("SELECT person.vorname, person.email, kaeufer.charges, kaeufer.paid_charges, kaeufer.open_charges
-                            FROM kaeufer
-                            JOIN person ON kaeufer.person_id = person.id
-                            WHERE person_id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->bind_result($vorname, $email, $charges, $paid, $open);
-    $stmt->fetch();
+$logHandle = fopen(__DIR__ . '/ticketMail.log', 'a'); // oder anderer Pfad
+
+// Check for already submitted-Tickets for this person
+$stmt = $conn->prepare('SELECT vorname, nachname, send_TicketMail
+                        FROM person
+                        WHERE id = ?');
+$stmt->bind_param('i', $personId);
+
+if(!$stmt->execute()){
+    echo json_encode([
+        'status' => 'fail',
+        'message' => 'Execution of prepared Statement failed'
+    ]);
     $stmt->close();
-
-    if ($open <= 0) {
-        // Mail senden: ACHTUNG: HIER ENTSTEHT EIN BUG, WENN DIE ANFRAGE AUS DEM RESEND-PORTAL KOMMT, DA DIE FUNKTION ZUM SENDEN DANN ZWEIMAL AUFGERUFEN WIRD
-        sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $open, $logHandle);
-        return true;
-    }else{
-        return false;
-    }
+    $conn->close();
+    return;
 }
 
-function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $open, $logHandle){
+$stmt->bind_result($vorname, $nachname, $send_TicketMail);
+
+if (!$stmt->fetch()) {
+    echo json_encode([
+        'status' => 'fail',
+        'message' => 'No person found with given ID'
+    ]);
+    $stmt->close();
+    $conn->close();
+    return;
+}
+
+// Start generating the PDF-File, because Mail wasnt send yet
+$returnVar = file_get_contents('http://localhost:3001/?person_id='. $personId);
+
+if ($returnVar === 'success') {
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'PDF erfolgreich generiert'
+    ]);
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'PDF-Generierung fehlgeschlagen'
+    ]);
+}
+
+// Send the Mail; attached the generated PDF
+//sendConfirmationMail($conn, $personId, $data['vorname'], $data['email'], $logHandle);
+function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
     $nachricht = "
     <!DOCTYPE html>
     <html>
@@ -231,9 +237,12 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $op
             $mail->setFrom($_ENV['MAIL_USERNAME'], 'Marie-Curie Gymnasium');
             $mail->addReplyTo('oscar-streich@t-online.de', 'Oscar');
             $mail->addAddress($email, $vorname);
-            $pdfPfad = __DIR__ . '../tickets/ticket_person_' . $id . '.pdf';
-            $mail->addAttachment($pdfPfad, 'Dein_Herbstball_Ticket.pdf');
-
+            $pdfPfad = __DIR__ . '/gen_pdfs/ticket_person_' . $id . '.pdf';
+            if (file_exists($pdfPfad)) {
+                $mail->addAttachment($pdfPfad, 'Dein_Herbstball_Ticket.pdf');
+            } else {
+                writeToLog($logHandle, "FEHLER: Ticket-PDF nicht gefunden unter $pdfPfad");
+            }
 
             // E-Mail-Inhalt
             $mail->isHTML(true);

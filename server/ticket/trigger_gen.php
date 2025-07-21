@@ -69,7 +69,7 @@ if ($returnVar === 'success') {
 }
 
 // Send the Mail; attached the generated PDF
-//sendConfirmationMail($conn, $personId, $data['vorname'], $data['email'], $logHandle);
+sendConfirmationMail($conn, $personId, $data['vorname'], $data['email'], $logHandle);
 function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
     $nachricht = "
     <!DOCTYPE html>

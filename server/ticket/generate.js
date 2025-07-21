@@ -2,31 +2,74 @@ require('dotenv').config({
   path: '../../.env'
 });
 
-const puppeteer = require('puppeteer'); // NICHT puppeteer-core
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
-const express = require('express')
-const app = express()
-const port = 3001;
-
+const bwipjs = require('bwip-js');
+const express = require('express');
 const mysql = require('mysql2/promise');
 
-const logoBase64 = getBase64Image(path.resolve(__dirname, 'images/Metis.png'));
-const qrBase64 = getBase64Image(path.resolve(__dirname, 'images/qr-code.png'));
-const barcodeBase64 = getBase64Image(path.resolve(__dirname, 'images/sampleBC.png'));
-
-//const personId = process.argv[2] || '20';
-
+const app = express();
+const port = 3001;
 const ticketsDir = path.resolve(__dirname, 'gen_pdfs');
 if (!fs.existsSync(ticketsDir)) fs.mkdirSync(ticketsDir);
 
-async function generatePDF(person_id){
+function transform(x, key) {
+  return (((x * 73) ^ key) % 9973).toString();
+}
+
+function getBase64Image(filePath) {
+  const image = fs.readFileSync(filePath);
+  const ext = path.extname(filePath).substring(1);
+  return `data:image/${ext};base64,${image.toString('base64')}`;
+}
+
+function generateBarcode(person_id, codeText, filePath) {
+  return new Promise((resolve, reject) => {
+    bwipjs.toBuffer({
+      bcid: 'code128',
+      text: codeText,
+      scale: 3,
+      height: 10,
+      includetext: true,
+      textxalign: 'center',
+    }, (err, png) => {
+      if (err) return reject(err);
+      try {
+        fs.mkdirSync(path.dirname(filePath), { recursive: true });
+        fs.writeFileSync(filePath, png);
+        console.log(`✅ Barcode gespeichert unter ${filePath}`);
+        resolve(filePath);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  });
+}
+
+async function generatePDF(person_id) {
   const fileName = `ticket_person_${person_id}.pdf`;
   const outputPath = path.resolve(ticketsDir, fileName);
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
 
-  // Verbindung konfigurieren
+  const eventCode = 'HB2025_';
+  const key = parseInt(process.env.ENC_KEY);
+  if (isNaN(key)) {
+    console.error('❌ ENV KEY ist ungültig oder nicht gesetzt');
+    process.exit(1);
+  }
+
+  const crypticCode = transform(person_id, key);
+  const codeText = eventCode + crypticCode;
+  const barcodePath = path.join(__dirname, 'barcodes', `${codeText}.png`);
+
+  console.log('🔍 Generierter Code:', codeText);
+
+  await generateBarcode(person_id, codeText, barcodePath);
+
+  const logoBase64 = getBase64Image(path.resolve(__dirname, 'images/Metis.png'));
+  const qrBase64 = getBase64Image(path.resolve(__dirname, 'images/qr-code.png'));
+  const barcodeBase64 = getBase64Image(barcodePath);
+
   const conn = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USERNAME,
@@ -34,21 +77,23 @@ async function generatePDF(person_id){
     database: process.env.DB_NAME
   });
 
-  const [data] = await conn.execute(`SELECT 
-            p.id AS person_id,
-            tb.kaeufer_id,
-            p.vorname,
-            p.nachname,
-            p.age
-        FROM 
-            person p
-        JOIN 
-            ticket_besitzer tb ON tb.person_id = p.id
-        WHERE 
-            p.id = ?
-    `, [person_id]);
+  const [data] = await conn.execute(`
+    SELECT 
+      p.id AS person_id,
+      tb.kaeufer_id,
+      p.vorname,
+      p.nachname,
+      p.age
+    FROM 
+      person p
+    JOIN 
+      ticket_besitzer tb ON tb.person_id = p.id
+    WHERE 
+      p.id = ?
+  `, [person_id]);
 
-  console.log(data);
+  const person = data[0];
+  if (!person) throw new Error(`Keine Person mit ID ${person_id} gefunden`);
 
   const html = `
   <!DOCTYPE html>
@@ -410,20 +455,10 @@ async function generatePDF(person_id){
   </html>
   `
 
-/*page.on('requestfailed', request => {
-    console.warn('❌ Request failed:', request.url(), request.failure());
-});
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
 
-page.on('requestfinished', request => {
-    console.log('✅ Request finished:', request.url());
-});
-
-page.on('pageerror', error => {
-    console.error('🛑 Page error:', error);
-});*/
-  
   await page.setContent(html, { waitUntil: 'domcontentloaded' });
-
   await page.pdf({
     path: outputPath,
     format: 'A4',
@@ -433,24 +468,21 @@ page.on('pageerror', error => {
 
   await browser.close();
   console.log(`✅ PDF wurde erstellt: ${outputPath}`);
+  return outputPath;
 }
 
-function getBase64Image(filePath) {
-  const image = fs.readFileSync(filePath);
-  const ext = path.extname(filePath).substring(1); // z.B. "png"
-  return `data:image/${ext};base64,${image.toString('base64')}`;
-}
+app.get('/', async (req, res) => {
+  if (!req.query.person_id) return res.status(400).send('fail');
 
-app.get('/', (req, res) => {
-  if(!!req.query.person_id){
-    generatePDF(req.query.person_id);
-    res.send('success');
-    return;
+  try {
+    const pdfPath = await generatePDF(req.query.person_id);
+    res.json({ status: 'success', pdfPath });
+  } catch (err) {
+    console.error('❌ Fehler bei PDF-Erstellung:', err);
+    res.status(500).send('fail');
   }
-
-  res.send('fail');
-})
+});
 
 app.listen(port, () => {
-  console.log(`listening on port ${port}`)
-})
+  console.log(`listening on port ${port}`);
+});

@@ -1,5 +1,5 @@
 require('dotenv').config({
-  path: '../.env'
+  path: '.env'
 });
 
 const puppeteer = require('puppeteer');
@@ -97,8 +97,8 @@ async function generatePDF(person_id) {
 
   await generateBarcode(person_id, codeText, barcodePath);
 
-  const logoBase64 = getBase64Image(path.resolve(__dirname, 'images/Metis.png'));
-  const qrBase64 = getBase64Image(path.resolve(__dirname, 'images/qr-code.png'));
+  const logoBase64 = getBase64Image(path.resolve(__dirname, 'ticket/images/Metis.png'));
+  const qrBase64 = getBase64Image(path.resolve(__dirname, 'ticket/images/qr-code.png'));
   const barcodeBase64 = getBase64Image(barcodePath);
 
   const conn = await mysql.createConnection({

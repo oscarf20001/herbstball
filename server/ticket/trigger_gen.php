@@ -56,7 +56,10 @@ if (!$stmt->fetch()) {
 // Start generating the PDF-File, because Mail wasnt send yet
 $returnVar = file_get_contents('http://localhost:3001/?person_id='. $personId);
 
-if ($returnVar === 'success') {
+$reponse = json_decode($returnVar, true); // true = associative array
+
+if ($reponse && $reponse['status'] === 'success') {
+    $pdfPath = $reponse['pdfPath'];
     echo json_encode([
         'status' => 'success',
         'message' => 'PDF erfolgreich generiert'

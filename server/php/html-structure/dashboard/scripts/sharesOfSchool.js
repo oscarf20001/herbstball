@@ -42,7 +42,7 @@ async function getSharesOfSchools(){
     const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
 
     try {
-        const response = await fetch('/server/php/html-structure/dashboard/php/getSharesOfSchool.php');
+        const response = await fetch('../server/php/html-structure/dashboard/php/getSharesOfSchool.php');
         
         if (!response.ok) {
             throw new Error(`HTTP-Fehler: ${response.status}`);

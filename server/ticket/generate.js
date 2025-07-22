@@ -14,8 +14,39 @@ const port = 3001;
 const ticketsDir = path.resolve(__dirname, 'gen_pdfs');
 if (!fs.existsSync(ticketsDir)) fs.mkdirSync(ticketsDir);
 
+const MOD = 65537;
+const mul = 73;
+
 function transform(x, key) {
-  return (((x * 73) ^ key) % 9973).toString();
+  return ((x * mul) ^ key) % MOD;
+}
+
+function inverseTransform(y, key) {
+  const afterXor = y ^ key;
+  const invMul = modInverse(mul, MOD);
+
+  return (afterXor * invMul) % MOD;
+}
+
+function modInverse(a, m) {
+  let m0 = m, t, q;
+  let x0 = 0, x1 = 1;
+
+  if (m === 1) return 0;
+
+  while (a > 1) {
+    q = Math.floor(a / m);
+    t = m;
+
+    m = a % m;
+    a = t;
+    t = x0;
+
+    x0 = x1 - q * x0;
+    x1 = t;
+  }
+
+  return x1 < 0 ? x1 + m0 : x1;
 }
 
 function getBase64Image(filePath) {
@@ -476,6 +507,7 @@ app.get('/', async (req, res) => {
 
   try {
     const pdfPath = await generatePDF(req.query.person_id);
+    //res.send('success');
     res.json({ status: 'success', pdfPath });
   } catch (err) {
     console.error('❌ Fehler bei PDF-Erstellung:', err);

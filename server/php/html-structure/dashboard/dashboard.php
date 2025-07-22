@@ -169,6 +169,7 @@ require_once __DIR__ . '/../../../../config.php'; // Holt BASE_PATH und BASE_URL
 <script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/animations.js"></script>
 <script src="../node_modules/chart.js/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 <script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/ticketbestand.js"></script>
 <script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/todaySold.js"></script>
 <script type="module" src="<?= BASE_URL ?>/server/php/html-structure/dashboard/scripts/weeklySold.js"></script>

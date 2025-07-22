@@ -43,10 +43,10 @@ async function getCount() {
     const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
 
     try {
-        const response = await fetch('/server/php/html-structure/dashboard/php/getCountTilToday.php');
+        const response = await fetch('../server/php/html-structure/dashboard/php/getCountTilToday.php');
         
         if (!response.ok) {
-        throw new Error(`HTTP-Fehler: ${response.status}`);
+            throw new Error(`HTTP-Fehler: ${response.status}`);
         }
 
         const data = await response.json();

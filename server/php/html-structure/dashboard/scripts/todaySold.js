@@ -120,10 +120,9 @@ async function drawChart() {
 
 async function howManyTicketsToday() {
   const basePath = window.location.hostname.includes('localhost') ? '/Metis/herbstball_25' : '';
-  console.log(basePath);
 
   try {
-    const response = await fetch('/server/php/html-structure/dashboard/php/howManyTicketsToday.php');
+    const response = await fetch('../server/php/html-structure/dashboard/php/howManyTicketsToday.php');
 
     if (!response.ok) {
       throw new Error(`HTTP-Fehler: ${response.status}`);

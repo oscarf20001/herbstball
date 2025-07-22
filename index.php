@@ -68,10 +68,22 @@ $GLOBALS['outputURLEnding'] = $outputURLEnding;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Herbstball des MCG 2025 - Powered by Metis</title>
+
     <link rel="stylesheet" href="client/styles/barStyles.css">
     <link rel="stylesheet" href="client/styles/form.css">
     <link rel="stylesheet" href="client/styles/inputFields.css">
-    <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
+
+    <!-- Standard-Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- PNG-Versionen (für moderne Browser) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <!-- Für Apple Geräte -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
     <script type="module" src="client/scripts/main.js"></script>
     <script type="module" src="client/scripts/finances.js"></script>
     <script type="module" src="client/scripts/dataTicket.js" defer></script>
@@ -79,6 +91,8 @@ $GLOBALS['outputURLEnding'] = $outputURLEnding;
     <script type="module" src="client/scripts/denied.js" defer></script>
     <!--<script src="client/scripts/analytics.js"></script>-->
     <script type="module" src="client/scripts/displayMessages.js"></script>
+    
+    <script src="https://kit.fontawesome.com/b9446e8a7d.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 </head>
 <body>

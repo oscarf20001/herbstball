@@ -17,7 +17,7 @@ if (!fs.existsSync(ticketsDir)) fs.mkdirSync(ticketsDir);
 const MOD = 65537;
 const mul = 73;
 
-const logDir = path.resolve(__dirname, 'node-logs');
+const logDir = path.resolve(__dirname, 'ticket/node-logs');
 if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
 const logFile = fs.createWriteStream(path.join(logDir, 'server.log'), { flags: 'a' });
@@ -114,8 +114,9 @@ async function generatePDF(person_id) {
     process.exit(1);
   }
 
-  const crypticCode = transform(person_id, key);
-  const codeText = eventCode + crypticCode;
+  //const numberCode = transform(person_id, key);
+  const numberCode = person_id.padStart(4, '0');
+  const codeText = eventCode + numberCode;
   const barcodePath = path.join(__dirname, 'ticket/barcodes', `${codeText}.png`);
 
   console.log('🔍 Generierter Code:', codeText);

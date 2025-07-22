@@ -229,7 +229,7 @@ function trigger_generation_tickets(data){
             if (data.status === 'success') {
                 alert("Generierung der Ticket(s) erfolgreich");
             } else {
-                alert("Generierung der Tickets fehlgeschlagen");
+                console.error("Generierung der Tickets fehlgeschlagen");
             }
         })
         .catch(error => {

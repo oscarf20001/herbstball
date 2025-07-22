@@ -242,7 +242,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
             $mail->addAddress($email, $vorname);
             $pdfPfad = __DIR__ . '/gen_pdfs/ticket_person_' . $id . '.pdf';
             if (file_exists($pdfPfad)) {
-                $mail->addAttachment($pdfPfad, 'Dein_Herbstball_Ticket.pdf');
+                $mail->addAttachment($pdfPfad, 'Ticket_'.$vorname.'-'.$nachname.'.pdf');
             } else {
                 writeToLog($logHandle, "FEHLER: Ticket-PDF nicht gefunden unter $pdfPfad");
             }

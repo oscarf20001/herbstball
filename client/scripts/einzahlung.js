@@ -219,7 +219,7 @@ function subtractZeroPointNinePercent(value) {
 
 function trigger_generation_tickets(data){
     for (let index = 0; index < data.persons.length; index++) {
-        fetch('../server/ticket/trigger_gen.php', {
+        fetch('../ticket/trigger_gen.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data.persons[index])

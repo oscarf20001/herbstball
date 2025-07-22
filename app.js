@@ -11,11 +11,36 @@ const mysql = require('mysql2/promise');
 
 const app = express();
 const port = 3001;
-const ticketsDir = path.resolve(__dirname, 'gen_pdfs');
+const ticketsDir = path.resolve(__dirname, 'ticket/gen_pdfs');
 if (!fs.existsSync(ticketsDir)) fs.mkdirSync(ticketsDir);
 
 const MOD = 65537;
 const mul = 73;
+
+const logDir = path.resolve(__dirname, 'node-logs');
+if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+
+const logFile = fs.createWriteStream(path.join(logDir, 'server.log'), { flags: 'a' });
+const errorFile = fs.createWriteStream(path.join(logDir, 'error.log'), { flags: 'a' });
+
+const origConsoleLog = console.log;
+const origConsoleError = console.error;
+
+// Timestamp hinzufügen
+function getTimestamp() {
+  return new Date().toISOString();
+}
+
+// Konsole umleiten
+console.log = (...args) => {
+	logFile.write(`[${getTimestamp()}] LOG: ${args.join(' ')}\n`);
+	origConsoleLog(...args); // auch auf die Konsole ausgeben
+};
+
+console.error = (...args) => {
+  	errorFile.write(`[${getTimestamp()}] ERROR: ${args.join(' ')}\n`);
+	origConsoleError(...args);
+};
 
 function transform(x, key) {
   return ((x * mul) ^ key) % MOD;
@@ -91,7 +116,7 @@ async function generatePDF(person_id) {
 
   const crypticCode = transform(person_id, key);
   const codeText = eventCode + crypticCode;
-  const barcodePath = path.join(__dirname, 'barcodes', `${codeText}.png`);
+  const barcodePath = path.join(__dirname, 'ticket/barcodes', `${codeText}.png`);
 
   console.log('🔍 Generierter Code:', codeText);
 

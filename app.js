@@ -89,6 +89,7 @@ function generateBarcode(person_id, codeText, filePath) {
       height: 10,
       includetext: true,
       textxalign: 'center',
+      textyoffset: 2,
     }, (err, png) => {
       if (err) return reject(err);
       try {

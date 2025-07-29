@@ -46,7 +46,7 @@ if ($isLocalhost) {
 // exit;
 
 // Pfad zur benötigten Datei
-$extractPartUrlPath = $basePath . '/server/php/html-structure/extract_part-URL.php';
+$extractPartUrlPath = 'server/php/html-structure/extract_part-URL.php';
 
 if (!file_exists($extractPartUrlPath)) {
     die("Fehler: Die Datei extract_part-URL.php wurde nicht gefunden unter: $extractPartUrlPath");

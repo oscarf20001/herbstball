@@ -72,8 +72,8 @@ if ($reponse && $reponse['status'] === 'success') {
 }
 
 // Send the Mail; attached the generated PDF
-sendConfirmationMail($conn, $personId, $data['vorname'], $data['email'], $logHandle);
-function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
+sendConfirmationMail($conn, $personId, $data['vorname'], $data['email'], $data['nachname'], $logHandle);
+function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandle){
     $nachricht = "
     <!DOCTYPE html>
     <html>
@@ -146,15 +146,13 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
             </h1>
 
             <p>
-                Du hast keine offenen Kosten mehr. Wie episch!<br>
-                Wir werden dir zu einem späteren Zeitpunkt nochmal eine Mail mit deinem Ticket und wichtigen Informationen schicken.<br>
-                Wir haben Bock und freuen uns zusammen mit dir auf den 17.10.2025<br><br>
+                Du hast keine offenen Kosten mehr. Wie episch!
             </p>
 
             <p>
                 Wir möchten euch, wo wir gerade schon alle hier sind, noch einige letzte wichtige Infos mitgeben und FAQs beantworten:<br><br>
 
-                Datum: <strong>11.04.2025</strong><br>
+                Datum: <strong>17.10.2025</strong><br>
                 Uhrzeit: <strong>Einlass</strong> ab 18:45 Uhr, Beginn um 20:00 Uhr, Ende: 01:00 Uhr<br>
                 Adresse: <strong>Friedrich-Wolf-Straße 31, Oranienburg</strong><br><br>
 
@@ -174,7 +172,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
                 Natürlich dürft ihr das, seid allerdings gewarnt, dass wer das Veranstaltungsgelände verlässt, der verlässt auch endgültig die Veranstaltung – der Weihnachtsmann hat da dann auch kein Nachsehen mehr. Ansonsten dürft ihr euch auf dem Gelände frei bewegen.<br><br>
 
                 🎸🎧 <strong>Wie kann ich Musikwünsche äußern?<br></strong>
-                Während der Veranstaltung dann hier: https://curiegymnasium.de/musikwuensche.php<br><br>
+                Während der Veranstaltung dann hier: https://curiegymnasium.de/client/musikwuensche.php<br><br>
 
                 <strong>Ihr werdet außerdem von der Veranstaltung ausgeschlossen, wenn: <br></strong>
                 - ❌ ihr euch daneben benehmt<br>
@@ -182,22 +180,21 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $logHandle){
                 - ❌ ihr euer Armband verliert<br>
                 - ❌ ihr euer Ticket bzw. eines eurer Tickets noch nicht bezahlt habt<br>
                 Genannte Punkte führen unwiderruflich zum sofortigen Ausschluss von der Veranstaltung und bei Bedarf zum Hinzuziehen der Polizei.<br>
-                Wir bitten um das Benehmen eurerseits, damit der aktuelle 11. Jahrgang des MCGs auch nach uns diese Veranstaltung durchführen kann.<br>
+                Wir bitten um das Benehmen eurerseits, damit wir in Zukunft auch noch in dieser Location diese Veranstaltung durchführen können.<br>
                 Ihr werdet nicht auf das Gelände gelassen, wenn ihr bereits vor Eintritt zu betrunken seid.<br><br>
 
-                Der Einlass findet von 18:45 bis 21:00 Uhr statt. Wer um 20:00 Uhr nicht durch die Kontrolle durch ist und die Veranstaltung trotzdem betreten möchte, muss an der Abendkasse 2,50 € auf seinen ursprünglichen Ticketpreis bezahlen, da um 20 Uhr die Eröffnung geplant ist.<br>
-                Wir bitten den 12. Jahrgang des MCG, pünktlich vor 20:00 Uhr in der Location einzutreffen. Der Eröffnungstanz ist für 20:15 Uhr angesetzt. 💃
+                Einlass ist von 18:45 bis 21:00 Uhr. Ab 20:15 Uhr läuft das Ganze dann als Abendkasse – wer also erst danach reinkommt, zahlt 2,50 € extra zum normalen Ticketpreis.<br>
             </p>
 
             <p>
-                Die Veranstaltung wird ca. um 00:00 Uhr bis 00:30 Uhr enden. Wir würden uns freuen, wenn sich am Ende der Veranstaltung noch einige freiwillige Helfer finden, die mit Gordon und dem gesamten Orga-Team den Saal schnell aufräumen.<br><br>
+                Die Veranstaltung wird ca. um 00:45 Uhr bis 01:00 Uhr enden. Wir würden uns freuen, wenn sich am Ende der Veranstaltung noch einige freiwillige Helfer finden, die mit Gordon und dem gesamten Orga-Team den Saal schnell aufräumen.<br><br>
 
-                Sollte es irgendwelche Probleme oder Anregungen sowohl technischer als auch allgemeiner Natur geben, antwortet gern auf diese Mail, wendet euch an 'streiosc@curiegym.de' oder sprecht uns persönlich an!<br>
-                Im Anhang findet ihr euer Ticket (Bar-Code)<br><br>
+                Sollte es irgendwelche Probleme oder Anregungen sowohl technischer als auch allgemeiner Natur geben, antwortet gern auf diese Mail, wendet euch an <code>oscar-streich@t-online.de</code> oder sprecht uns persönlich an!<br>
+                Im Anhang findet ihr euer Ticket (PDF)<br><br>
             </p>
 
             <p>
-                🌟 🎁 Wir danken und freuen uns riesig zusammen mit dir auf den 11.04. und wünschen dir eine frohe Frühlingszeit bis dahin!<br><br>
+                🌟 🎁 Wir danken und freuen uns riesig zusammen mit dir auf den 11.10. und wünschen dir eine frohe Sommerzeit bis dahin!<br><br>
                 Mit freundlichen Grüßen,<br><strong>Gordon!</strong>
             </p>
 

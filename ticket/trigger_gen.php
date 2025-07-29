@@ -159,7 +159,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandl
                 🦺 <strong>\"gibts irgendwie Security Menschen, die den Einlass kontrollieren oder macht ihr das einfach?\"<br></strong>
                 <strong>Ja</strong>, es wird beim Betreten des Geländes eine Personalausweis-, als auch Taschenkontrolle, sowie Bodychecks geben. Durchgeführt werden diese vom Sicherheitspersonal.<br><br>
 
-                🎒 <strong>\"kann man bei der gaderobe morgen auch nen Rucksack abgeben? Bestimmt oder?\"<br></strong>
+                🎒 <strong>\"kann man bei der gaderobe auch nen Rucksack abgeben? Bestimmt oder?\"<br></strong>
                 <strong>Ja</strong>, unsere fleißigen Helfer werden euch auch mit euren Rucksäcken helfen können. Haltet euer Gepäck jedoch bitte möglichst klein und seht davon ab, irgendwelche Wertgegenstände, außer den amtlichen Lichtbildausweis 🪪, einzupacken.<br><br>
 
                 👗 <strong>\"Habt ihr nh Dresscode?\"<br></strong>

@@ -23,6 +23,9 @@ data/
 backups/
 qrcode/codes/
 qrcodes/
+gen_pdfs/
+barcodes/
+
 
 *.log
 node_modules/

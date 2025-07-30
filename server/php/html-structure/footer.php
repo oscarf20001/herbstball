@@ -15,3 +15,7 @@
         </a>
     </div>
 </div>
+
+<p id="bedingungen">
+    <a href="/../../client/bedingungen.php">Bedingungen</a>
+</p>

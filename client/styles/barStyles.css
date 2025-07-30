@@ -210,6 +210,7 @@ header p{
 
 #socialMedia p{
     text-decoration: underline;
+    color: var(--greyLighter);
 }
 
 #socialMedia, #socialMedia a{
@@ -218,6 +219,14 @@ header p{
     justify-content: center;
     align-items: center;
     text-decoration: none;
+}
+
+#bedingungen{
+    margin: 0 0 0 2rem;
+}
+
+#bedingungen a{
+    color: var(--greyLighter);
 }
 
 .fa-instagram{

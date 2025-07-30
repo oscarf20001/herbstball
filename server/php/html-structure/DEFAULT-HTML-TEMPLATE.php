@@ -65,8 +65,10 @@ if($outputURLEnding == 'index'){
     require __DIR__ . '/mainContainer/MC_admin.php';
 }else if($outputURLEnding == 'mails'){
     require __DIR__ . '/mainContainer/MC_mails.php';
+}else if($outputURLEnding == 'bedingungen'){
+    require __DIR__ . '/mainContainer/MC_bedingungen.php';
 }else{
-    echo "Noch kein mainContainer für diese Unterseite definiert: Bitte wende dich an <code>oscar-streich@t-online.de</code>";
+    echo '<p><code style="color: red; font-weight:900;">Error: No specific (main)-container given. Contact -> oscar-streich@t-online.de</code></p>';
 }
 
 ?>

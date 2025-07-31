@@ -4,6 +4,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
+date_default_timezone_set('Europe/Berlin');
+
 require 'db_connection.php';
 require __DIR__ . '/../../vendor/autoload.php'; // Autoloader einbinden
 
@@ -137,22 +139,20 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $op
             </h1>
 
             <p>
-                Du hast keine offenen Kosten mehr. Wie episch!<br>
-                Wir werden dir zu einem späteren Zeitpunkt nochmal eine Mail mit deinem Ticket und wichtigen Informationen schicken.<br>
-                Wir haben Bock und freuen uns zusammen mit dir auf den 17.10.2025<br><br>
+                Du hast keine offenen Kosten mehr. Wie episch!
             </p>
 
             <p>
                 Wir möchten euch, wo wir gerade schon alle hier sind, noch einige letzte wichtige Infos mitgeben und FAQs beantworten:<br><br>
 
-                Datum: <strong>11.04.2025</strong><br>
+                Datum: <strong>17.10.2025</strong><br>
                 Uhrzeit: <strong>Einlass</strong> ab 18:45 Uhr, Beginn um 20:00 Uhr, Ende: 01:00 Uhr<br>
                 Adresse: <strong>Friedrich-Wolf-Straße 31, Oranienburg</strong><br><br>
 
                 🦺 <strong>\"gibts irgendwie Security Menschen, die den Einlass kontrollieren oder macht ihr das einfach?\"<br></strong>
                 <strong>Ja</strong>, es wird beim Betreten des Geländes eine Personalausweis-, als auch Taschenkontrolle, sowie Bodychecks geben. Durchgeführt werden diese vom Sicherheitspersonal.<br><br>
 
-                🎒 <strong>\"kann man bei der gaderobe morgen auch nen Rucksack abgeben? Bestimmt oder?\"<br></strong>
+                🎒 <strong>\"kann man bei der gaderobe auch nen Rucksack abgeben? Bestimmt oder?\"<br></strong>
                 <strong>Ja</strong>, unsere fleißigen Helfer werden euch auch mit euren Rucksäcken helfen können. Haltet euer Gepäck jedoch bitte möglichst klein und seht davon ab, irgendwelche Wertgegenstände, außer den amtlichen Lichtbildausweis 🪪, einzupacken.<br><br>
 
                 👗 <strong>\"Habt ihr nh Dresscode?\"<br></strong>
@@ -165,7 +165,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $op
                 Natürlich dürft ihr das, seid allerdings gewarnt, dass wer das Veranstaltungsgelände verlässt, der verlässt auch endgültig die Veranstaltung – der Weihnachtsmann hat da dann auch kein Nachsehen mehr. Ansonsten dürft ihr euch auf dem Gelände frei bewegen.<br><br>
 
                 🎸🎧 <strong>Wie kann ich Musikwünsche äußern?<br></strong>
-                Während der Veranstaltung dann hier: https://curiegymnasium.de/musikwuensche.php<br><br>
+                Während der Veranstaltung dann hier: https://curiegymnasium.de/client/musikwuensche.php<br><br>
 
                 <strong>Ihr werdet außerdem von der Veranstaltung ausgeschlossen, wenn: <br></strong>
                 - ❌ ihr euch daneben benehmt<br>
@@ -173,22 +173,21 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $op
                 - ❌ ihr euer Armband verliert<br>
                 - ❌ ihr euer Ticket bzw. eines eurer Tickets noch nicht bezahlt habt<br>
                 Genannte Punkte führen unwiderruflich zum sofortigen Ausschluss von der Veranstaltung und bei Bedarf zum Hinzuziehen der Polizei.<br>
-                Wir bitten um das Benehmen eurerseits, damit der aktuelle 11. Jahrgang des MCGs auch nach uns diese Veranstaltung durchführen kann.<br>
+                Wir bitten um das Benehmen eurerseits, damit wir in Zukunft auch noch in dieser Location diese Veranstaltung durchführen können.<br>
                 Ihr werdet nicht auf das Gelände gelassen, wenn ihr bereits vor Eintritt zu betrunken seid.<br><br>
 
-                Der Einlass findet von 18:45 bis 21:00 Uhr statt. Wer um 20:00 Uhr nicht durch die Kontrolle durch ist und die Veranstaltung trotzdem betreten möchte, muss an der Abendkasse 2,50 € auf seinen ursprünglichen Ticketpreis bezahlen, da um 20 Uhr die Eröffnung geplant ist.<br>
-                Wir bitten den 12. Jahrgang des MCG, pünktlich vor 20:00 Uhr in der Location einzutreffen. Der Eröffnungstanz ist für 20:15 Uhr angesetzt. 💃
+                Einlass ist von 18:45 bis 21:00 Uhr. Ab 20:15 Uhr läuft das Ganze dann als Abendkasse – wer also erst danach reinkommt, zahlt 2,50 € extra zum erworbenen Ticketpreis.<br>
             </p>
 
             <p>
-                Die Veranstaltung wird ca. um 00:00 Uhr bis 00:30 Uhr enden. Wir würden uns freuen, wenn sich am Ende der Veranstaltung noch einige freiwillige Helfer finden, die mit Gordon und dem gesamten Orga-Team den Saal schnell aufräumen.<br><br>
+                Die Veranstaltung wird ca. um 00:45 Uhr bis 01:00 Uhr enden. Wir würden uns freuen, wenn sich am Ende der Veranstaltung noch einige freiwillige Helfer finden, die mit Gordon und dem gesamten Orga-Team den Saal schnell aufräumen.<br><br>
 
-                Sollte es irgendwelche Probleme oder Anregungen sowohl technischer als auch allgemeiner Natur geben, antwortet gern auf diese Mail, wendet euch an 'streiosc@curiegym.de' oder sprecht uns persönlich an!<br>
-                Im Anhang findet ihr euer Ticket (Bar-Code)<br><br>
+                Sollte es irgendwelche Probleme oder Anregungen sowohl technischer als auch allgemeiner Natur geben, antwortet gern auf diese Mail, wendet euch an <code>oscar-streich@t-online.de</code> oder sprecht uns persönlich an!<br>
+                Im Anhang findet ihr euer Ticket (PDF)<br><br>
             </p>
 
             <p>
-                🌟 🎁 Wir danken und freuen uns riesig zusammen mit dir auf den 11.04. und wünschen dir eine frohe Frühlingszeit bis dahin!<br><br>
+                🌟 🎁 Wir danken und freuen uns riesig zusammen mit dir auf den 17.10. und wünschen dir eine frohe Sommerzeit bis dahin!<br><br>
                 Mit freundlichen Grüßen,<br><strong>Gordon!</strong>
             </p>
 
@@ -206,9 +205,8 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $op
             </p>
 
             <div class='footer'>
-                *Alle Angaben ohne Gewähr; Änderungen vorbehalten
+                *Alle Angaben ohne Gewähr; Änderungen vorbehalten; <a href='https://www.curiegymnasium.de/client/bedingungen.php'>Teilnahmebedingungen</a>
             </div>
-
     </body>
     </html>        
             ";
@@ -234,17 +232,16 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $charges, $paid, $op
             $pdfPfad = __DIR__ . '../tickets/ticket_person_' . $id . '.pdf';
             $mail->addAttachment($pdfPfad, 'Dein_Herbstball_Ticket.pdf');
 
-
             // E-Mail-Inhalt
             $mail->isHTML(true);
             $mail->Body = $nachricht;
             $mail->Subject = '🎉 Epische Ticketbestätigung: Herbstball MCG-FFR 2025 🍁🌙';
             $mail->AltBody = 'Deine Kosten wurden beglichen. Hier Tickets für den Herbstball des MCG 2025 sichern: https://www.curiegymnasium.de/';
 
-            // E-Mail senden
             // E-Mail senden und loggen
             if ($mail->send()) {
                 writeToLog($logHandle, "ERFOLG: E-Mail an {$email} gesendet.");
+                setDateInDatabase($conn, $id);
             } else {
                 writeToLog($logHandle, "FEHLER: E-Mail an {$email} nicht gesendet. Fehler: " . $mail->ErrorInfo);
             }
@@ -276,4 +273,32 @@ function writeToLog($handleOrPath, string $message): void {
     else {
         error_log("writeToLog: Ungültiger Parameter für Log-Ziel.");
     }
+}
+
+function setDateInDatabase($conn, $id){
+    #Sets the date of the ticket Mail for one person in the database
+
+    $response = [
+        'status' => 'Wir führten die Funktion aus...'
+    ];
+    
+    $stmt = $conn->prepare("UPDATE person SET send_TicketMail = 1, dateSendTicketMail = ? WHERE id = ?");
+    if (!$stmt) {
+        die("Prepare fehlgeschlagen: " . $conn->error);
+    }
+    
+    // Parameter binden
+    if (!$stmt->bind_param("si", $timestamp, $id)) {
+        die("Bind fehlgeschlagen: " . $stmt->error);
+    }
+    
+    // Statement ausführen
+    if (!$stmt->execute()) {
+        die("Ausführung fehlgeschlagen: " . $stmt->error);
+    }
+    
+    // Statement schließen
+    $stmt->close();
+    $conn->close();
+    echo json_encode($response);
 }

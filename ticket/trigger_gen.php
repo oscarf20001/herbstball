@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
+date_default_timezone_set('Europe/Berlin');
 
 require_once __DIR__ . '/../server/php/db_connection.php';
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -36,9 +37,8 @@ if(!$stmt->execute()){
         'status' => 'fail',
         'message' => 'Execution of prepared Statement failed'
     ]);
-    $stmt->close();
-    $conn->close();
     return;
+    $stmt->close();
 }
 
 $stmt->bind_result($vorname, $nachname, $send_TicketMail);
@@ -49,26 +49,32 @@ if (!$stmt->fetch()) {
         'message' => 'No person found with given ID'
     ]);
     $stmt->close();
-    $conn->close();
     return;
 }
+
+$stmt->close();
 
 // Start generating the PDF-File, because Mail wasnt send yet
 $returnVar = file_get_contents('http://localhost:3001/?person_id='. $personId);
 
 $reponse = json_decode($returnVar, true); // true = associative array
 
+$messageForNetwork = [
+    'status' => 'error',
+    'message' => 'kein Inhalt zurückgegeben'
+];
+
 if ($reponse && $reponse['status'] === 'success') {
     $pdfPath = $reponse['pdfPath'];
-    echo json_encode([
+    $messageForNetwork = [
         'status' => 'success',
         'message' => 'PDF erfolgreich generiert'
-    ]);
+    ];
 } else {
-    echo json_encode([
+    $messageForNetwork = [
         'status' => 'error',
         'message' => 'PDF-Generierung fehlgeschlagen'
-    ]);
+    ];
 }
 
 // Send the Mail; attached the generated PDF
@@ -135,7 +141,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandl
                 font-size: 12px;
                 color: #888;
                 text-align: center;
-                margin-top: 40px;
+                margin: 40px 0 10px 0;
             }
         </style>
     </head>
@@ -183,7 +189,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandl
                 Wir bitten um das Benehmen eurerseits, damit wir in Zukunft auch noch in dieser Location diese Veranstaltung durchführen können.<br>
                 Ihr werdet nicht auf das Gelände gelassen, wenn ihr bereits vor Eintritt zu betrunken seid.<br><br>
 
-                Einlass ist von 18:45 bis 21:00 Uhr. Ab 20:15 Uhr läuft das Ganze dann als Abendkasse – wer also erst danach reinkommt, zahlt 2,50 € extra zum normalen Ticketpreis.<br>
+                Einlass ist von 18:45 bis 21:00 Uhr. Ab 20:15 Uhr läuft das Ganze dann als Abendkasse – wer also erst danach reinkommt, zahlt 2,50 € extra zum erworbenen Ticketpreis.<br>
             </p>
 
             <p>
@@ -191,11 +197,6 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandl
 
                 Sollte es irgendwelche Probleme oder Anregungen sowohl technischer als auch allgemeiner Natur geben, antwortet gern auf diese Mail, wendet euch an <code>oscar-streich@t-online.de</code> oder sprecht uns persönlich an!<br>
                 Im Anhang findet ihr euer Ticket (PDF)<br><br>
-            </p>
-
-            <p>
-                🌟 🎁 Wir danken und freuen uns riesig zusammen mit dir auf den 11.10. und wünschen dir eine frohe Sommerzeit bis dahin!<br><br>
-                Mit freundlichen Grüßen,<br><strong>Gordon!</strong>
             </p>
 
             <p>
@@ -208,13 +209,15 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandl
             </p>
 
             <p>
-                Mit freundlichen Grüßen,<br>Gordon!
+                🌟 🎁 Wir danken und freuen uns riesig zusammen mit dir auf den 17.10. und wünschen dir eine frohe Sommerzeit bis dahin!<br><br>
+
+
+                Mit freundlichen Grüßen,<br><strong>Gordon!</strong>
             </p>
 
             <div class='footer'>
-                *Alle Angaben ohne Gewähr; Änderungen vorbehalten
+                *Alle Angaben ohne Gewähr; Änderungen vorbehalten; <a href='https://www.curiegymnasium.de/client/bedingungen.php'>Teilnahmebedingungen</a>
             </div>
-
     </body>
     </html>        
             ";
@@ -254,6 +257,7 @@ function sendConfirmationMail($conn, $id, $vorname, $email, $nachname, $logHandl
             // E-Mail senden und loggen
             if ($mail->send()) {
                 writeToLog($logHandle, "ERFOLG: E-Mail an {$email} gesendet.");
+                setDateInDatabase($conn, $id);
             } else {
                 writeToLog($logHandle, "FEHLER: E-Mail an {$email} nicht gesendet. Fehler: " . $mail->ErrorInfo);
             }
@@ -286,3 +290,34 @@ function writeToLog($handleOrPath, string $message): void {
         error_log("writeToLog: Ungültiger Parameter für Log-Ziel.");
     }
 }
+
+function setDateInDatabase($conn, $id){
+    #Sets the date of the ticket Mail for one person in the database
+
+    $messageForNetwork[] = [
+        'status' => 'info',
+        'message' => 'Funktion für aktualiserung in der Datenbank würde ausgeführt werden!'
+    ];
+    $timestamp = date('Y-m-d H:i:s');
+    
+    $stmt = $conn->prepare("UPDATE person SET send_TicketMail = 1, dateSendTicketMail = ? WHERE id = ?");
+    if (!$stmt) {
+        die("Prepare fehlgeschlagen: " . $conn->error);
+    }
+    
+    // Parameter binden
+    if (!$stmt->bind_param("si", $timestamp, $id)) {
+        die("Bind fehlgeschlagen: " . $stmt->error);
+    }
+    
+    // Statement ausführen
+    if (!$stmt->execute()) {
+        die("Ausführung fehlgeschlagen: " . $stmt->error);
+    }
+    
+    // Statement schließen
+    $stmt->close();
+    $conn->close();
+}
+
+echo json_encode($messageForNetwork);

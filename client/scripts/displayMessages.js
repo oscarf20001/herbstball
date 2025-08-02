@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   // gsap code here!
 });
 
-export function displayMessage(msg){
+export function displayMessage(msg, details = null){
     switch (msg) {
         case 'email':
             displayElementText.textContent = 'Registrierung fehlgeschlagen: Ungültige Email';
@@ -55,6 +55,42 @@ export function displayMessage(msg){
         case 'financing_success':
             displayElementText.textContent = 'Eintragung erfolgreich!';
             displayContainer.style.backgroundColor = 'var(--successGreen)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'req_gen-ticket':
+            displayElementText.textContent = 'Anfrage für Ticketgenerierung und Versendung an Server geschickt!';
+            displayContainer.style.backgroundColor = 'var(--successGreen)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'success_generationAndDeliveryTicket':
+            displayElementText.textContent = 'Ticket(s) wurden erfolgreich versendet!';
+            displayContainer.style.backgroundColor = 'var(--successGreen)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'error_generationAndDeliveryTicket':
+            displayElementText.textContent = 'Unbekannter Fehler bei Generierung der Ticket(s)! Bitte Info an Oscar';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'specific-error_generationAndDeliveryTicket':
+            displayElementText.textContent = 'Fehler bei Generierung der Ticket(s)! Bitte Info an Oscar: ' + details;
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
             displayContainer.style.transform = 'translate(-50%, 0%)';
             setTimeout(() => {
                 displayContainer.style.transform = 'translate(-50%, -200%)';

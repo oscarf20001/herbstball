@@ -42,7 +42,7 @@ function fetchAndRender(email) {
 
         // Generierung der Tickets
         if(data.kaeufer[0].open_charges <= 0){
-            alert("Ausführung");
+            displayMessage("req_gen-ticket");
             trigger_generation_tickets(data);
         }
 
@@ -75,8 +75,9 @@ function renderTables(data, email) {
                         <th>Nachname</th>
                         <th>Tickets</th>
                         <th>Zu Bezahlen</th>
-                        <th>Gezahlt <sup style="font-weight: normal; color: var(--greyLighter);">exkl. 0.9% (wenn PayPal)</sup></th>
+                        <th id="table-column-Heading-AmountWasPaid">${buyer.method == 'PayPal' ? 'Gezahlt <sup style="font-weight: normal; color: var(--greyLighter);">exkl. 0.9%</sup>' : 'Gezahlt'}</th>
                         <th>Offen</th>
+                        <th>Methode</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,8 +87,9 @@ function renderTables(data, email) {
                         <td>${buyer.nachname}</td>
                         <td>${buyer.tickets}</td>
                         <td>${parseFloat(buyer.charges).toFixed(2)}</td>
-                        <td>${parseFloat(buyer.paid_charges).toFixed(2)}</td>
+                        <td>${buyer.method == 'PayPal' ? parseFloat(buyer.paid_charges).toFixed(2) + '<sub style="font-weight: normal; color: var(--successGreen);"> ' + parseFloat(buyer.paid_charges * 1.009).toFixed(2) + '</sub>' : parseFloat(buyer.paid_charges).toFixed(2)}</td>
                         <td>${parseFloat(buyer.open_charges).toFixed(2)}</td>
+                        <td>${buyer.method == null ? 'Noch nicht bezahlt' : buyer.method}</td>
                     </tr>
                 </tbody>
             </table>
@@ -153,9 +155,25 @@ function renderTables(data, email) {
 
     container.innerHTML = buyerTable + personsTable + financingForm;
 
+    // --------------------------------------------------
     // Finanzierung Button aktivieren
+    // --------------------------------------------------
     document.getElementById('set-money-btn').addEventListener('click', () => {
         handleFinancing(data.kaeufer[0].id, email);
+    });
+
+    // --------------------------------------------------
+    // Event-Listener für PayPal-Handler
+    // --------------------------------------------------
+    document.getElementById('pay-method').addEventListener('change', function(){
+        const selectedValue = document.getElementById('pay-method').value;
+        const tableColumnToUpdate = document.getElementById('table-column-Heading-AmountWasPaid');
+        
+        if(selectedValue == 'PayPal'){
+            tableColumnToUpdate.innerHTML = 'Gezahlt <sup style="font-weight: normal; color: var(--greyLighter);">exkl. 0.9%</sup>';
+        }else{
+            tableColumnToUpdate.innerHTML = 'Gezahlt';
+        }
     });
 }
 
@@ -168,6 +186,7 @@ function handleFinancing(personID, email) {
 
     let rawValue = moneyInput.value.trim().replace(',', '.');
     const money = parseFloat(rawValue);
+    let checkedMoney = 0.00;
 
     if (isNaN(money) || money <= 0) {
         alert("Bitte gültigen Betrag eingeben.");
@@ -178,12 +197,16 @@ function handleFinancing(personID, email) {
     if (method === '-') {
         alert("Bitte Zahlungsmethode auswählen.");
         return;
+    }else if(method === 'PayPal'){
+        checkedMoney = subtractZeroPointNinePercent(money.toFixed(2));
+    }else{
+        checkedMoney = money.toFixed(2);
     }
 
     const payload = {
         ID: personID,
         Methode: method,
-        Geld: subtractZeroPointNinePercent(money.toFixed(2))
+        Geld: checkedMoney
     };
 
     fetch('../server/php/sendMoneyIntoDatabase.php', {
@@ -227,13 +250,15 @@ function trigger_generation_tickets(data){
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                alert("Generierung der Ticket(s) erfolgreich");
+                displayMessage("success_generationAndDeliveryTicket");
             } else {
-                console.error("Generierung der Tickets fehlgeschlagen");
+                console.error("Fehler bei der Ticketgenerierung");
+                displayMessage("error_generationAndDeliveryTicket");
             }
         })
         .catch(error => {
             console.error("Fehler bei der Ticketgenerierung:", error);
+            displayMessage("specific-error_generationAndDeliveryTicket", error);
         });
     }
 }

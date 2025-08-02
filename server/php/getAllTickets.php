@@ -26,7 +26,7 @@ if ($email === null) {
 $persons = [];
 $kaeufer = [];
 
-$stmt = $conn->prepare("SELECT p2.id, p2.vorname, p2.nachname, k.tickets, k.charges, k.paid_charges, k.open_charges
+$stmt = $conn->prepare("SELECT p2.id, p2.vorname, p2.nachname, k.tickets, k.charges, k.paid_charges, k.open_charges, k.method
 FROM kaeufer k
 JOIN person p2 ON k.person_id = p2.id
 WHERE p2.email = ?;

@@ -55,7 +55,7 @@ if (!$stmt->fetch()) {
 $stmt->close();
 
 // Start generating the PDF-File, because Mail wasnt send yet
-$returnVar = file_get_contents('http://localhost:3001/?person_id='. $personId);
+$returnVar = file_get_contents('https://metis-pdfgen.curiegymnasium.de/?person_id='. $personId);
 
 $reponse = json_decode($returnVar, true); // true = associative array
 
@@ -65,7 +65,9 @@ $messageForNetwork = [
 ];
 
 if ($reponse && $reponse['status'] === 'success') {
-    $pdfPath = $reponse['pdfPath'];
+    $pdfFile = base64_decode($reponse['pdf']);
+    $pdfPfad = __DIR__ . '/gen_pdfs/ticket_person_' . $id . '.pdf';
+    file_put_contents($pdfPfad, $pdfFile);
     $messageForNetwork = [
         'status' => 'success',
         'message' => 'PDF erfolgreich generiert'

@@ -501,7 +501,7 @@ async function generatePDF(person_id) {
                   <tr>
                       <th></th>
                       <td>Einlass ab 16 Jahren (unter 18 nur bis 24:00 Uhr oder mit Erziehungsbeauftragung gemäß JuSchG). Keine Rücknahme oder Erstattung von Tickets. Keine Haftung für Sach- oder Personenschäden. Mit Betreten des Geländes erklären Sie sich mit möglichen Foto- und Videoaufnahmen einverstanden. Es gelten die vollständigen Teilnahmebedingungen unter:
-                          <br><a href="https://www.curiegymnasium.de/bedingungen">curiegymnasium.de/bedingungen</a>
+                          <br><a href="https://www.curiegymnasium.de/client/bedingungen.php">curiegymnasium.de/client/bedingungen.php</a>
                       </td>
                   </tr>
               </table>
@@ -513,7 +513,7 @@ async function generatePDF(person_id) {
   </html>
   `
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, product: 'firefox' });
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: 'domcontentloaded' });
@@ -526,16 +526,16 @@ async function generatePDF(person_id) {
 
   await browser.close();
   console.log(`✅ PDF wurde erstellt: ${outputPath}`);
-  return outputPath;
+  return Buffer.from(fs.readFileSync(outputPath), "utf8").toString('base64');
 }
 
 app.get('/', async (req, res) => {
   if (!req.query.person_id) return res.status(400).send('fail');
 
   try {
-    const pdfPath = await generatePDF(req.query.person_id);
+    const pdf = await generatePDF(req.query.person_id);
     //res.send('success');
-    res.json({ status: 'success', pdfPath });
+    res.json({ status: 'success', pdf });
   } catch (err) {
     console.error('❌ Fehler bei PDF-Erstellung:', err);
     res.status(500).send('fail');

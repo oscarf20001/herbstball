@@ -66,11 +66,12 @@ $messageForNetwork = [
 
 if ($reponse && $reponse['status'] === 'success') {
     $pdfFile = base64_decode($reponse['pdf']);
-    $pdfPfad = __DIR__ . '/gen_pdfs/ticket_person_' . $id . '.pdf';
+    $pdfPfad = __DIR__ . '/gen_pdfs/ticket_person_' . $personId . '.pdf';
     file_put_contents($pdfPfad, $pdfFile);
     $messageForNetwork = [
         'status' => 'success',
-        'message' => 'PDF erfolgreich generiert'
+        'message' => 'PDF erfolgreich generiert',
+        'base64' => base64_encode($pdfFile)
     ];
 } else {
     $messageForNetwork = [

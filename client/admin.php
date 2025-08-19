@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Herbstball des MCG 2025 - Powered by Metis</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/barstyles.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/barStyles.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/einzahlungen.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/client/styles/inputFields.css">

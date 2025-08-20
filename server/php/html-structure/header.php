@@ -21,6 +21,8 @@ $outputURLEnding = getOutputURLEnding();
             echo '<p>📧 Emails erneut versenden (Für den Fall, dass jemand zu dumm war, seine Mail richtig anzugeben)</p>';
         } elseif ($outputURLEnding == 'bedingungen') {
             echo '<p>📝 Teilnahmebedingungen der Veranstaltung</p>';
+        } elseif ($outputURLEnding == 'create_user') {
+            echo '<p>👮 Benutzerverwaltung</p>';
         }else{
             echo '<p><code style="color: red; font-weight:900;">Error: No specific description given. Contact -> oscar-streich@t-online.de</code></p>';
         }

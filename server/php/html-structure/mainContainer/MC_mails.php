@@ -4,6 +4,16 @@
             require __DIR__ . '/../loginForm.php';
         } else{
             // -- 👉 Hier wird der normale Resendbereich geladen 
+            // Login-Versuch
+            if (empty($_SESSION['logged_in']) || empty($_SESSION['permissions']) || !in_array('can_resend_mails', $_SESSION['permissions'])) {
+                echo "<script>
+                    alert('Permission denied');
+                    window.location.href = document.referrer && document.referrer !== window.location.href 
+                        ? document.referrer 
+                        : '/../../../../index.php';
+                </script>";
+                exit;
+            }
             ?>
                 <form action="" method="post" id="form">
                     <div id="ticketsContainer">

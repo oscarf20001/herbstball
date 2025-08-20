@@ -36,6 +36,10 @@ $outputURLEnding = getOutputURLEnding();
         <i class="fa-solid fa-door-open sideBarIconElement denied"></i>
         <a class="denied" href="#">Einlass-Panel</a>
     </div>
+    <div class="sidebarTextElement" id="site-create_user">
+        <i class="fa-solid fa-user sideBarIconElement"></i>
+        <a href="<?= BASE_URL ?>/client/create_user.php">Users</a>
+    </div>
 </div>
 
 <script>

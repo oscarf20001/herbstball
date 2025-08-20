@@ -97,6 +97,15 @@ export function displayMessage(msg, details = null){
             },5000);
             break;
 
+        case 'permission_denied':
+            displayElementText.textContent = 'Permission denied';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
         default:
             break;
     }

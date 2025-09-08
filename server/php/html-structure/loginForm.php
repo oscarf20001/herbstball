@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['username'], $_POST['p
             $error = "Falscher Benutzername oder Passwort!";
         }
     } else {
-        $error = "Falscher Benutzername oder Passwort!";
+        $error = "Falscher Benutzername";
     }
 
     $stmt->close();

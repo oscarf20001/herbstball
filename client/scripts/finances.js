@@ -1,10 +1,10 @@
 const shoppingCartIndex = document.getElementById('shoppingCartIndex');
 
 const ts_earlyBird = 1751839199; // 12€
-const ts_schonBisslTeurer = 1753048799; // 13€
-const ts_nochEtwasMehrBisslTeurer = 1755467999; // 14€
-const ts_preLastMinute = 1759528799; // 15€
-const ts_lastMinute = 1760565599; // 17,50€
+const ts_schonBisslTeurer = 1751839199; // 13€
+const ts_nochEtwasMehrBisslTeurer = 1753048799; // 14€
+const ts_preLastMinute = 1755467999; // 15€
+const ts_lastMinute = 1759528799; // 17,50€
 const ts_currentTime = Date.now() / 1000;
 //const ts_currentTime = 1785794399; // 2026er Timestamp für Tests
 

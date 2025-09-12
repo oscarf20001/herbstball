@@ -78,3 +78,74 @@
             }
         ?>
 </div>
+<script>
+    const create_user_btn = document.getElementById('create_new_user_submit');
+    create_user_btn.addEventListener('click', () => {
+        let req_fields = ['c-name', 'c-email', 'c-password', 'c-confirm_password'];
+
+        // Auf leere Felder prüfen
+        req_fields.forEach(element => {
+            let html_element = document.getElementById(element)
+            let html_element_value = html_element.value;
+            
+            if(!html_element_value){
+                html_element.classList.add('invalid');
+                alert("Leere Felder")
+                return;
+            }
+        });
+
+        let username = document.getElementById('c-name').value || false;
+        let email = document.getElementById('c-email').value || false;
+        let pwd = document.getElementById('c-password').value || false;
+        
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        // Auf legitime Mail prüfen
+        if (!email || !isValidEmail(email)) {
+            alert("Bitte eine gültige E-Mail-Adresse eingeben.");
+            return;
+        }
+
+        // Prüfen, ob Passwörter identisch
+        let pwd_fields = ['c-password', 'c-confirm_password'];
+        if(document.getElementById(pwd_fields[0]).value !== document.getElementById(pwd_fields[1]).value){
+            alert("Passwörter nicht identisch!");
+            return;
+        }
+
+        let userData = [username, email, pwd];
+
+        // Senden und warten auf respoonse
+        fetch('../../server/php/createNewUser.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userData })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+                }
+                return response.json(); // oder .text(), falls kein JSON
+            })
+            .then(data => {
+                console.log("Antwort:", data);
+
+                if(data.success){
+                    alert("all fine");
+                    req_fields.forEach(element => {
+                        document.getElementById(element).value = '';
+                    });
+                }else{
+                    alert("not good");
+                }
+            })
+            .catch(error => {
+                console.error("Fehler beim Fetch:", error);
+            });
+
+
+    });
+</script>

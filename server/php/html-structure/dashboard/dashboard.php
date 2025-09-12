@@ -101,7 +101,7 @@ require_once __DIR__ . '/../../../../config.php'; // Holt BASE_PATH und BASE_URL
                     $stmt->bind_result($sum);
                     $stmt->fetch();
                     //echo json_encode(3775.97 - (float) $sum) . '€';
-                    echo number_format(3784.51 - (float) $sum, 2, '.', '') . '€';
+                    echo number_format(2951 - (float) $sum, 2, '.', '') . '€';
                     $stmt->close();
                 ?>
             </h1>

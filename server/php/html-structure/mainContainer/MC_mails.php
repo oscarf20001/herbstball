@@ -10,7 +10,7 @@
                     alert('Permission denied');
                     window.location.href = document.referrer && document.referrer !== window.location.href 
                         ? document.referrer 
-                        : '/../../../../index.php';
+                        : '../index.php';
                 </script>";
                 exit;
             }

@@ -133,19 +133,18 @@
             .then(data => {
                 console.log("Antwort:", data);
 
-                if(data.success){
-                    alert("all fine");
+                if(!!data.success){
+                    alert("User wurde erfolgreich erstellt");
                     req_fields.forEach(element => {
                         document.getElementById(element).value = '';
                     });
                 }else{
-                    alert("not good");
+                    alert("Fehlerhaft: " + data.message);
                 }
             })
             .catch(error => {
                 console.error("Fehler beim Fetch:", error);
             });
-
 
     });
 </script>

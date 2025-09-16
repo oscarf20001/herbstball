@@ -48,7 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if($stmt->execute()){
         // Logging des Payments
-        if(logPayment($conn, $id, $oldMoney, $geld)){
+        // 1. Käufer-ID der Person holen
+        $getKaeuferId = $conn->prepare("SELECT id FROM kaeufer WHERE person_id = ?");
+        $getKaeuferId->bind_param('i', $id);
+        $getKaeuferId->execute();
+        $getKaeuferId->bind_result($logPayment_kaeuferId);
+        $getKaeuferId->fetch();
+        $getKaeuferId->close();
+
+
+        // 2. Payment final loggen
+        if(logPayment($conn, $logPayment_kaeuferId, $oldMoney, $geld)){
             $response = [
                 'status' => 'success'
             ];
@@ -68,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 function logPayment($conn, $kaeufer_id, $oldMoney, $newMoney){
-   $log = $conn->prepare("INSERT INTO payments (user_id, kaeufer_id, old_cost, added) VALUES (?,?,?,?)");
+   $log = $conn->prepare("INSERT INTO payments (user_id, kaeufer_id, old_paid, added) VALUES (?,?,?,?)");
 
     if (!$log) {
         $response = [

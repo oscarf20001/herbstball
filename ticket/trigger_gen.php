@@ -17,6 +17,7 @@ $email = $data['email'] ?? 'streiosc@curiegym.de';
 $vorname = $data['vorname'] ?? 'Teilnehmer';
 
 if (!$email) {
+    writeToLog($logHandle, "❌ FEHLER: E-Mail existiert nicht: '{$email}'");
     echo json_encode([
         'status' => 'fail',
         'message' => 'E-Mail-Adresse fehlt!'
@@ -33,6 +34,7 @@ $stmt = $conn->prepare('SELECT vorname, nachname, send_TicketMail
 $stmt->bind_param('i', $personId);
 
 if(!$stmt->execute()){
+    writeToLog($logHandle, "❌ FEHLER: Prepared Statement failed for mail: '{$email}'");
     echo json_encode([
         'status' => 'fail',
         'message' => 'Execution of prepared Statement failed'
@@ -44,6 +46,7 @@ if(!$stmt->execute()){
 $stmt->bind_result($vorname, $nachname, $send_TicketMail);
 
 if (!$stmt->fetch()) {
+    writeToLog($logHandle, "❌ FEHLER: No person found with given ID. Email: '{$email}'");
     echo json_encode([
         'status' => 'fail',
         'message' => 'No person found with given ID'

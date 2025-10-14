@@ -69,6 +69,8 @@ if($outputURLEnding == 'index'){
     require __DIR__ . '/mainContainer/MC_bedingungen.php';
 }else if($outputURLEnding == 'create_user'){
     require __DIR__ . '/mainContainer/MC_user.php';
+}else if($outputURLEnding == 'musikwuensche'){
+    require __DIR__ . '/mainContainer/MC_musikwuensche.php';
 }else{
     echo '<p><code style="color: red; font-weight:900;">Error: No specific (main)-container given. Contact -> oscar-streich@t-online.de</code></p>';
 }

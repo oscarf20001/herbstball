@@ -11,9 +11,9 @@ $outputURLEnding = getOutputURLEnding();
         <i class="fa-solid fa-ticket sideBarIconElement"></i>
         <a href="<?= BASE_URL ?>/index.php">Tickets</a>
     </div>
-    <div class="sidebarTextElement" id="site-music">
-        <i class="fa-solid fa-music sideBarIconElement denied"></i>
-        <a class="denied" href="#">Musikwünsche</a>
+    <div class="sidebarTextElement" id="site-musikwuensche">
+        <i class="fa-solid fa-music sideBarIconElement"></i>
+        <a href="<?= BASE_URL ?>/client/musikwuensche.php">Musikwünsche</a>
     </div>
     
     <!-- Seperator Line -->

@@ -117,7 +117,8 @@ body{
     grid-area: 2 / 2 / 3 / 4;
     background-color: var(--primaryDarker);
     position: relative;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #display{

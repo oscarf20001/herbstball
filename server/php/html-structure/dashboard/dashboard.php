@@ -101,13 +101,14 @@ require_once __DIR__ . '/../../../../config.php'; // Holt BASE_PATH und BASE_URL
                     $stmt->bind_result($sum);
                     $stmt->fetch();
                     //echo json_encode(3775.97 - (float) $sum) . '€';
-                    echo number_format(2951 - (float) $sum, 2, '.', '') . '€';
+                    //echo number_format(2951 - (float) $sum, 2, '.', '') . '€';
+                    echo number_format(3098.12 - (float) $sum, 2, '.', '') . '€';
                     $stmt->close();
                 ?>
             </h1>
         </div>
         <div class="display-container_subheading">
-            <p>fehlendes Geld</p>
+            <p>fehlendes Geld <sup style="color: lightgrey;">bis Finanzierung</sup></p>
         </div>
     </div>
 

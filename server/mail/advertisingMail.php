@@ -8,7 +8,11 @@ use PHPMailer\PHPMailer\Exception;
 
 $logHandle = fopen(__DIR__ . '/mail.log', 'a'); // oder anderer Pfad
 
-$sqlGetAllMails = "SELECT email, vorname FROM k150883_fruehlingsball.käufer WHERE id > 254 LIMIT 250";
+$sqlGetAllMails = "SELECT email, vorname, kaeufer.open_charges
+FROM person 
+INNER JOIN kaeufer 
+ON kaeufer.person_id = person.id
+WHERE kaeufer.open_charges > 0 AND person.id > 75";
 //$sqlGetAllMails = "SELECT email, vorname FROM k150883_fruehlingsball.käufer WHERE id > 250 LIMIT 250";
 $stmt = $conn->prepare($sqlGetAllMails);
 $stmt->execute();
@@ -17,9 +21,12 @@ $result = $stmt->get_result();
 while ($row = $result->fetch_assoc()) {
     $allMails[] = [
         'email' => $row['email'],
-        'vorname' => $row['vorname']
+        'vorname' => $row['vorname'],
+        'open' => $row['open_charges']
     ];
 }
+
+//stark.eventsolution@gmail.com
 
 for ($i=0; $i < count($allMails); $i++) { 
     //echo $allMails[$i]['vorname'] . "<br>";
@@ -29,7 +36,7 @@ for ($i=0; $i < count($allMails); $i++) {
 <html>
 <head>
     <meta charset='UTF-8'>
-    <title>Ticketreservierung Herbstball 2025 MCG-FFR</title>
+    <title>Ticketbezahlung Herbstball 2025 MCG-FFR</title>
     <style>
         body {
             margin: 0;
@@ -78,7 +85,7 @@ for ($i=0; $i < count($allMails); $i++) {
             color: #ffffff;
         }
         .qr-section {
-            text-align: center;
+            text-align: left;
             margin: 32px 0;
         }
         .footer {
@@ -93,46 +100,42 @@ for ($i=0; $i < count($allMails); $i++) {
     <div class='container'>
         <h1>Hey " . $allMails[$i]['vorname'] . ",</h1>
         <p>
-            der Frühling hat getanzt – jetzt tanzt der Herbst!<br>
-            Nach eurem grandiosen Feedback zum Frühlingsball freuen wir uns riesig, euch zur nächsten großen Nacht einzuladen:<br><br>
+            ihr habt eure Tickets gesichert – jetzt geht’s um die Bezahlung!<br><br>
 
-            🌸 HERBSTBALL 2025 – Marie Curie meets Friedlieb Runge 🌸 <br><br>
+            Mir ist zu Ohren gekommen, dass ihr das noch nicht von eurer To-Do Liste abgehakt habt. Ab sofort könnt ihr eure Tickets ganz bequem bezahlen:<br><br>
 
-            Ein Abend voller Beats, Bass und bester Stimmung wartet auf euch. Seid dabei, wenn wir am 17. Oktober 2025 im Friedrich-Wolf-Haus Lehnitz den Herbst zum Leuchten bringen!<br>
+            🏫 direkt in den Schulen des Marie-Curie-Gymnasiums (MCG) oder des Friedlieb-Runge-Gymnasiums (FFRG). Der Verkauf an den Schulen wird von den Verantwortlichen der jeweiligen Schule selber koordiniert.<br>
+            🎟️ per Vor-Ort Bezahlung (ab 21 Uhr Abendkasse; + 2,50€)<br>
+            💸 ganz easy per PayPal (am Veranstaltungstag wird kein PayPal mehr akzeptiert)<br>
         </p>
-        <p>
-            ✨ Das erwartet euch:<br><br>
 
-            Ein mitreißender DJ-Sound, der euch nicht stillstehen lässt<br>
-            🍹 Fancy Drinks & coole Vibes<br>
-            📸 Fotowand + Deko + Mega-Fotodrucker<br>
-            💫 Ein Abend, den ihr nicht vergessen werdet
-        </p>
-        <br>
         <p>
-            🎟️ TICKETPREISE:<br>
+            Bei dir handelt es sich um eine offene Summe von:<br>
+            <strong style='color:#c0392b;'>".$allMails[$i]['open']."€</strong>
+        </p>
 
-            Wie schon immer für 12€. Aber Achtung, Gordon braucht demnächst eine Gehaltserhöhung - deswegen werden wir die Preise in rund einem Monat für alle auf 13,50€ festlegen!
-        </p>
-        <p>
-            <a href='https://curiegymnasium.de/' class='cta-button'>
-                🎟️ Tickets holen
-            </a>
-        </p>
-        <p>
-            <strong>Hier sind alle wichtigen Infos:</strong><br><br>
-            📅 Datum: 17.10.2025<br>
-            🕓 Uhrzeit: Einlass ab 18:45 Uhr, Beginn um 20:00 Uhr, Ende: 01:00 Uhr<br>
-            📍 Adresse: Friedrich-Wolf-Straße 31, Oranienburg<br>
-            🔞 Ab 16 Jahren (mit gültigem Ausweis)<br>
-            👗 Come as you are – oder einfach: Look fresh, feel fab<br>
-        </p>
+        <div class='qr-section'>
+            Wenn du dich für PayPal entscheidest, scanne den folgenden PayPal-QR-Code und überweise die gerade genannte Summe mit dem folgenden Verwendungszweck:<br><br>
+            <strong>'" . str_replace("@", "at", $allMails[$i]['email']) . " Herbstball'</strong><br>
+            </p><br>
+            <img src='cid:paypal_qr' alt='QR zur Bezahlung' style='max-width: 100%; height: auto; border-radius: 6px;'>
+        </div>
+
         <p style='color:#c0392b;'>
-            <strong>Die Plätze sind limitiert – first come, first dance!</strong>
+            Wichtig: Ab <strong>21:00 Uhr</strong> gilt ausschließlich Abendkasse – und da kommen noch einmal extra Kosten oben drauf. Also: sichert euch vorher eure Tickets, um Geld zu sparen!
         </p>
 
         <p>
-            Wir freuen uns, euch wiederzusehen – mit alter Crew, neuen Moves und jeder Menge Glitzer im Oktober!💕<br><br>
+            Und denkt dran: So ein Abend macht mit vielen Freunden noch viel mehr Spaß! 🎉<br>
+            Also ladet unbedingt noch weitere Leute ein und feiert mit uns gemeinsam eine unvergessliche Herbstnacht. 🍂✨
+        </p>
+
+        <p> 
+            <a href='https://curiegymnasium.de/' class='cta-button'> 🎟️ Tickets holen </a> 
+        </p>
+
+        <p>
+            Wir sehen uns auf der Tanzfläche – mit euch, eurer Crew und jeder Menge Energie!<br><br>
             Beste Grüße,<br>
             euer Gordon ✨
         </p>
@@ -162,9 +165,10 @@ for ($i=0; $i < count($allMails); $i++) {
             $mail->addAddress($allMails[$i]['email'], $allMails[$i]['vorname']);
 
             // E-Mail-Inhalt
+            $mail->AddEmbeddedImage('images/paypal.jpeg', 'paypal_qr');
             $mail->isHTML(true);
             $mail->Body = $nachricht;
-            $mail->Subject = '🎉Save the Date: HERBSTBALL 2025 – Die Nacht, die du nicht verpassen willst!🍁🌙';
+            $mail->Subject = 'Herbstball-Tickets: So einfach zahlst du jetzt 💸🍂';
             $mail->AltBody = 'Hier Tickets für den Herbstball des MCG 2025 sichern: https://www.curiegymnasium.de/';
 
             // E-Mail senden

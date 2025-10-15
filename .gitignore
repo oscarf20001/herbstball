@@ -28,6 +28,7 @@ barcodes/
 
 
 *.log
+/logs/
 node_modules/
 venv/
 

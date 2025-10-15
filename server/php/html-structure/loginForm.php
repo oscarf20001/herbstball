@@ -15,18 +15,27 @@ switch ($outputURLEnding) {
     case 'index':
         $loginFormSubText = '';
         break;
+        
     case 'einzahlung':
         $loginFormSubText = 'Einzahlungen';
         break;
+
     case 'admin':
         $loginFormSubText = 'Adminpanel';
         break;
+
     case 'mails':
         $loginFormSubText = 'Mails erneut senden';
         break;
+
     case 'create_user':
         $loginFormSubText = 'Benutzerverwaltung';
         break;
+
+    case 'einlass':
+        $loginFormSubText = 'Einlass-Panel';
+        break;
+
     default:
         $loginFormSubText = '<code style="color: red;">Keine Unterschrift festgelegt</code>';
         break;

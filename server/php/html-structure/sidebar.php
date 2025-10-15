@@ -32,9 +32,9 @@ $outputURLEnding = getOutputURLEnding();
         <i class="fa-solid fa-envelope sideBarIconElement"></i>
         <a href="<?= BASE_URL ?>/client/mails.php">Resend Mails</a>
     </div>
-    <div class="sidebarTextElement" id="site-entrance">
-        <i class="fa-solid fa-door-open sideBarIconElement denied"></i>
-        <a class="denied" href="#">Einlass-Panel</a>
+    <div class="sidebarTextElement" id="site-einlass">
+        <i class="fa-solid fa-door-open sideBarIconElement"></i>
+        <a href="<?= BASE_URL ?>/client/einlass.php">Einlass-Panel</a>
     </div>
     <div class="sidebarTextElement" id="site-create_user">
         <i class="fa-solid fa-user sideBarIconElement"></i>

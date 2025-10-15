@@ -23,8 +23,10 @@ $outputURLEnding = getOutputURLEnding();
             echo '<p>📝 Teilnahmebedingungen der Veranstaltung</p>';
         } elseif ($outputURLEnding == 'create_user') {
             echo '<p>👮 Benutzerverwaltung</p>';
-        } elseif ($outputURLEnding == 'musikwuensche'){
+        } elseif ($outputURLEnding == 'musikwuensche') {
             echo '<p>🎵 Musikwünsche</p>';
+        }elseif ($outputURLEnding == 'einlass') {
+            echo '<p>🙎‍♂️ Einlass</p>';
         }else{
             echo '<p><code style="color: red; font-weight:900;">Error: No specific description given. Contact -> oscar-streich@t-online.de</code></p>';
         }

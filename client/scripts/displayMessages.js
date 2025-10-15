@@ -106,6 +106,15 @@ export function displayMessage(msg, details = null){
             },5000);
             break;
 
+        case 'entrance_successfull':
+            displayElementText.textContent = 'Einlass für ' + details + ' erfolgreich';
+            displayContainer.style.backgroundColor = 'var(--successGreen)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
         default:
             break;
     }

@@ -131,7 +131,7 @@ class Entrance {
       const res = await fetch(`../server/php/confirmEntrance.php?id=${id}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const d = await res.json();
-      console.log(d.message);
+      alert(d.message);
       return !!d.success;
     } catch (err) {
       console.error("Fehler beim Bestätigen des Einlasses:", err);
